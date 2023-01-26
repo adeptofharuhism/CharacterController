@@ -1,4 +1,5 @@
 ﻿using Assets.CodeBase.Infrastructure.Services;
+using Assets.CodeBase.Infrastructure.Services.Input;
 using System;
 using System.Collections.Generic;
 
@@ -13,7 +14,7 @@ namespace Assets.CodeBase.Infrastructure.States
             _states = new Dictionary<Type, IExitableState> {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, services),
                 [typeof(LoadLevelScene)] = new LoadLevelScene(this, sceneLoader),
-                [typeof(GameLoopState)] = new GameLoopState(this),
+                [typeof(GameLoopState)] = new GameLoopState(this, services.Single<IInputService>()),
             };
         }
 

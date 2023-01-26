@@ -1,5 +1,6 @@
 ﻿using Assets.CodeBase.Constants;
 using Assets.CodeBase.Infrastructure.Services;
+using Assets.CodeBase.Infrastructure.Services.Input;
 
 namespace Assets.CodeBase.Infrastructure.States
 {
@@ -31,6 +32,7 @@ namespace Assets.CodeBase.Infrastructure.States
 
         private void RegisterServices() {
             _services.RegisterSingle<IGameStateMachine>(_stateMachine);
+            _services.RegisterSingle<IInputService>(new InputService());
         }
     }
 }

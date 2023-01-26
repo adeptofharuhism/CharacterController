@@ -11,7 +11,7 @@
         }
 
         public void Enter(string nextScene) {
-            _sceneLoader.Load(nextScene);
+            _sceneLoader.Load(nextScene, OnLoaded);
         }
 
         public void Exit() {

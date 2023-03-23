@@ -7,8 +7,8 @@ namespace Assets.CodeBase.Infrastructure.States
 {
     public class GameStateMachine : IGameStateMachine
     {
-        private Dictionary<Type, IExitableState> _states;
-        private IExitableState _activeState;
+        protected Dictionary<Type, IExitableState> _states;
+        protected IExitableState _activeState;
 
         public GameStateMachine(SceneLoader sceneLoader, AllServices services) {
             _states = new Dictionary<Type, IExitableState> {

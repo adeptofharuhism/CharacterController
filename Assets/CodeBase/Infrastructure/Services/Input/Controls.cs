@@ -35,11 +35,20 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""WalkToggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""beb4c4e5-f942-4171-8251-39578d9b840e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
-                    ""name"": ""2D Vector"",
+                    ""name"": ""WASD"",
                     ""id"": ""ce0ee324-baca-4ab5-aafd-02e9b7833c4a"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
@@ -92,6 +101,17 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2c3b1d6a-204a-4f34-8c7c-0df9e686acdb"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WalkToggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -113,6 +133,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         // Character
         m_Character = asset.FindActionMap("Character", throwIfNotFound: true);
         m_Character_Move = m_Character.FindAction("Move", throwIfNotFound: true);
+        m_Character_WalkToggle = m_Character.FindAction("WalkToggle", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -173,11 +194,13 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Character;
     private ICharacterActions m_CharacterActionsCallbackInterface;
     private readonly InputAction m_Character_Move;
+    private readonly InputAction m_Character_WalkToggle;
     public struct CharacterActions
     {
         private @Controls m_Wrapper;
         public CharacterActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Character_Move;
+        public InputAction @WalkToggle => m_Wrapper.m_Character_WalkToggle;
         public InputActionMap Get() { return m_Wrapper.m_Character; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -190,6 +213,9 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @Move.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnMove;
+                @WalkToggle.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnWalkToggle;
+                @WalkToggle.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnWalkToggle;
+                @WalkToggle.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnWalkToggle;
             }
             m_Wrapper.m_CharacterActionsCallbackInterface = instance;
             if (instance != null)
@@ -197,6 +223,9 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @WalkToggle.started += instance.OnWalkToggle;
+                @WalkToggle.performed += instance.OnWalkToggle;
+                @WalkToggle.canceled += instance.OnWalkToggle;
             }
         }
     }
@@ -213,5 +242,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     public interface ICharacterActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnWalkToggle(InputAction.CallbackContext context);
     }
 }

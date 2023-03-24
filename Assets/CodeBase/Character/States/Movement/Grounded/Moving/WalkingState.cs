@@ -8,6 +8,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
 {
     public class WalkingState : MovementState
     {
-
+        public WalkingState(MovementStateMachine stateMachine) : base(stateMachine) {
+        }
     }
 }

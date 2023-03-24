@@ -7,12 +7,18 @@ namespace Assets.CodeBase.Character.States.Movement
 {
     public class MovementStateMachine : UnitStateMachine
     {
-        public MovementStateMachine() {
+        private readonly Player.Player _player;
+
+        public Player.Player Player => _player;
+
+        public MovementStateMachine(Player.Player player) {
+            _player = player;
+
             _states = new Dictionary<Type, IUnitState>() {
-                [typeof(IdlingState)] = new IdlingState(),
-                [typeof(WalkingState)] = new WalkingState(),
-                [typeof(RunningState)] = new RunningState(),
-                [typeof(SprintingState)] = new SprintingState(),
+                [typeof(IdlingState)] = new IdlingState(this),
+                [typeof(WalkingState)] = new WalkingState(this),
+                [typeof(RunningState)] = new RunningState(this),
+                [typeof(SprintingState)] = new SprintingState(this),
             };
         }
     }

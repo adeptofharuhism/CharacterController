@@ -8,6 +8,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
 {
     public class IdlingState : MovementState
     {
-
+        public IdlingState(MovementStateMachine stateMachine) : base(stateMachine) {
+        }
     }
 }

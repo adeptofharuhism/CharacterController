@@ -10,6 +10,10 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
         public bool MoveInputTriggered => _moveInputTriggered;
         public Vector2 MoveInputValue => _controls.Character.Move.ReadValue<Vector2>();
 
+        public delegate void EventZeroParameters();
+        public event EventZeroParameters WalkToggleTriggered;
+        public event EventZeroParameters MovementCancelled;
+
         public InputService() {
             _controls = new Controls();
         }
@@ -17,6 +21,11 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
         public void Enable() {
             _controls.Character.Move.started += _ => _moveInputTriggered = true;
             _controls.Character.Move.canceled += _ => _moveInputTriggered = false;
+
+            _controls.Character.Move.canceled += _ => MovementCancelled?.Invoke();
+
+            _controls.Character.WalkToggle.started += _ => WalkToggleTriggered?.Invoke();
+
             _controls.Enable();
         }
 

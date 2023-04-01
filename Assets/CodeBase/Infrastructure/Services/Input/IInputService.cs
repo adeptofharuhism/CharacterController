@@ -7,6 +7,9 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
         Vector2 MoveInputValue { get; }
         bool MoveInputTriggered { get; }
 
+        event InputService.EventZeroParameters WalkToggleTriggered;
+        event InputService.EventZeroParameters MovementCancelled;
+
         void Disable();
         void Enable();
     }

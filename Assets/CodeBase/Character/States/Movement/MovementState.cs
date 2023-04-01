@@ -1,5 +1,4 @@
 ﻿using Assets.CodeBase.Infrastructure;
-using System;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement
@@ -18,6 +17,8 @@ namespace Assets.CodeBase.Character.States.Movement
         protected Vector3 _dampedTargetRotationCurrentVelocity;
         protected Vector3 _dampedTargetRotationPassedTime;
 
+        protected static bool _isWalking = false;
+
         public MovementState(MovementStateMachine stateMachine) {
             _stateMachine = stateMachine;
 
@@ -26,10 +27,12 @@ namespace Assets.CodeBase.Character.States.Movement
 
         public virtual void Enter() {
             Debug.Log($"State: {GetType().Name}");
+
+            AddInputActionsCallbacks();
         }
 
         public virtual void Exit() {
-
+            RemoveInputActionsCallbacks();
         }
 
         public virtual void HandleInput() {
@@ -145,5 +148,19 @@ namespace Assets.CodeBase.Character.States.Movement
 
         protected Vector3 GetMovementDirection() =>
             new Vector3(_movementInput.x, 0f, _movementInput.y);
+
+        protected void ResetVelocity() =>
+            _stateMachine.Player.Rigidbody.velocity = Vector3.zero;
+
+        protected virtual void AddInputActionsCallbacks() {
+            _stateMachine.Player.InputService.WalkToggleTriggered += WalkToggle;
+        }
+
+        protected virtual void RemoveInputActionsCallbacks() {
+            _stateMachine.Player.InputService.WalkToggleTriggered -= WalkToggle;
+        }
+
+        protected virtual void WalkToggle() => 
+            _isWalking = !_isWalking;
     }
 }

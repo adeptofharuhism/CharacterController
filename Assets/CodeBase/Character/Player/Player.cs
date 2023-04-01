@@ -12,12 +12,16 @@ namespace Assets.CodeBase.Character.Player
 
         private IInputService _inputService;
         private MovementStateMachine _movementStateMachine;
+        private Transform _mainCameraTransform;
 
         public IInputService InputService => _inputService;
         public Rigidbody Rigidbody => _rigidbody;
+        public Transform MainCameraTransform => _mainCameraTransform;
 
         private void Awake() {
             _inputService = AllServices.Container.Single<IInputService>();
+
+            _mainCameraTransform = UnityEngine.Camera.main.transform;
 
             _movementStateMachine = new MovementStateMachine(this);
         }

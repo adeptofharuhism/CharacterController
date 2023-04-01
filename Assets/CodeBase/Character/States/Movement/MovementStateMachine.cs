@@ -1,7 +1,6 @@
 ﻿using Assets.CodeBase.Character.States.Movement.Grounded;
 using Assets.CodeBase.Character.States.Movement.Grounded.Moving;
 using Assets.CodeBase.Infrastructure;
-using Assets.CodeBase.Infrastructure.States;
 using System;
 using System.Collections.Generic;
 

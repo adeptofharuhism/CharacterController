@@ -4,7 +4,7 @@ using Assets.CodeBase.Infrastructure.Services.Input;
 
 namespace Assets.CodeBase.Infrastructure.States
 {
-    public class BootstrapState : IState
+    public class BootstrapState : IGameState
     {
         private readonly GameStateMachine _stateMachine;
         private readonly SceneLoader _sceneLoader;
@@ -31,7 +31,7 @@ namespace Assets.CodeBase.Infrastructure.States
         }
 
         private void RegisterServices() {
-            _services.RegisterSingle<IGameStateMachine>(_stateMachine);
+            _services.RegisterSingle<IStateMachine>(_stateMachine);
             _services.RegisterSingle<IInputService>(new InputService());
         }
     }

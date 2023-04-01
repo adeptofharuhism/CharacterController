@@ -1,8 +1,8 @@
 ﻿using Assets.CodeBase.Infrastructure.Services;
 
-namespace Assets.CodeBase.Infrastructure.States
+namespace Assets.CodeBase.Infrastructure
 {
-    public interface IGameStateMachine: IService
+    public interface IStateMachine : IService
     {
         void Enter<TState, TPayload>(TPayload payload) where TState : class, IPayloadedState<TPayload>;
         void Enter<TState>() where TState : class, IState;

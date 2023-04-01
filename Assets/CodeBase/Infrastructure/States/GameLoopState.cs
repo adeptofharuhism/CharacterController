@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.CodeBase.Infrastructure.States
 {
-    public class GameLoopState : IState
+    public class GameLoopState : IGameState
     {
         private readonly GameStateMachine _stateMachine;
         private readonly IInputService _inputService;

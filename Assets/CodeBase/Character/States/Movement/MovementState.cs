@@ -1,9 +1,4 @@
-﻿using Assets.CodeBase.Infrastructure.Services.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Assets.CodeBase.Infrastructure;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement

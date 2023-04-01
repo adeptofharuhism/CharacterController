@@ -1,6 +1,6 @@
 ﻿namespace Assets.CodeBase.Infrastructure.States
 {
-    public class LoadLevelScene : IPayloadedState<string>
+    public class LoadLevelScene : IPayloadedGameState<string>
     {
         private readonly GameStateMachine _stateMachine;
         private readonly SceneLoader _sceneLoader;

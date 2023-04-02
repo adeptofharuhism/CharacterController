@@ -11,10 +11,12 @@ namespace Assets.CodeBase.Character.Data.States.Grounded
         [SerializeField] private UnitRotationData _baseRotationData;
         [SerializeField] private UnitWalkData _walkData;
         [SerializeField] private UnitRunData _runData;
+        [SerializeField] private AnimationCurve _slopeSpeedAngles;
 
         public float BaseSpeed => _baseSpeed;
         public UnitRotationData BaseRotationData => _baseRotationData;
         public UnitWalkData WalkData => _walkData;
         public UnitRunData RunData => _runData;
+        public AnimationCurve SlopeSpeedAngles => _slopeSpeedAngles;
     }
 }

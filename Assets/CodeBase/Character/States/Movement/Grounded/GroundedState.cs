@@ -55,6 +55,12 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
                 _stateMachine.Player.LayerData.GroundLayer,
                 QueryTriggerInteraction.Ignore)) {
 
+                float groundAngle = Vector3.Angle(hit.normal, -downwardsFromCapsuleCenter.direction);
+
+                float slopeSpeedModifier = SetSlopeModifierOnAngle(groundAngle);
+                if (slopeSpeedModifier == 0f)
+                    return;
+
                 float distanceToFloatingPoint = 
                     _stateMachine.Player.ColliderUtility.CapsuleColliderData.ColliderCenterInLocalSpace.y * 
                     _stateMachine.Player.transform.localScale.y - hit.distance;
@@ -68,6 +74,14 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
 
                 _stateMachine.Player.Rigidbody.AddForce(liftForce, ForceMode.VelocityChange);
             }
-        }       
+        }
+
+        private float SetSlopeModifierOnAngle(float groundAngle) {
+            float slopeSpeedModifier = _stateMachine.Player.Data.GroundedData.SlopeSpeedAngles.Evaluate(groundAngle);
+
+            _stateMachine.ReusableData.MovementOnSlopesSpeedModifier = slopeSpeedModifier;
+
+            return slopeSpeedModifier;
+        }
     }
 }

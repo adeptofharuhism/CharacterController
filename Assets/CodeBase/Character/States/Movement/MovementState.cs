@@ -53,7 +53,7 @@ namespace Assets.CodeBase.Character.States.Movement
                 return;
 
             Vector3 movementDirection = GetMovementDirection();
-            
+
             float targetRotationYAngle = Rotate(movementDirection);
             Vector3 targetRotationDirection = GetTargetRotationDirection(targetRotationYAngle);
 
@@ -140,7 +140,7 @@ namespace Assets.CodeBase.Character.States.Movement
             new Vector3(0f, _stateMachine.Player.Rigidbody.velocity.y, 0f);
 
         protected float GetMovementSpeed() =>
-            _groundedData.BaseSpeed * _stateMachine.ReusableData.MovementSpeedModifier;
+            _groundedData.BaseSpeed * _stateMachine.ReusableData.MovementOnSlopesSpeedModifier * _stateMachine.ReusableData.MovementSpeedModifier;
 
         protected Vector3 GetMovementDirection() =>
             new Vector3(_stateMachine.ReusableData.MovementInput.x, 0f, _stateMachine.ReusableData.MovementInput.y);
@@ -156,7 +156,7 @@ namespace Assets.CodeBase.Character.States.Movement
             _stateMachine.Player.InputService.WalkToggleTriggered -= WalkToggle;
         }
 
-        protected virtual void WalkToggle() => 
+        protected virtual void WalkToggle() =>
             _stateMachine.ReusableData.IsWalking = !_stateMachine.ReusableData.IsWalking;
     }
 }

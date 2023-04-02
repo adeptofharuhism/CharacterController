@@ -136,6 +136,9 @@ namespace Assets.CodeBase.Character.States.Movement
             return playerHorizontalVelocity;
         }
 
+        protected Vector3 GetPlayerVerticalVelocity() =>
+            new Vector3(0f, _stateMachine.Player.Rigidbody.velocity.y, 0f);
+
         protected float GetMovementSpeed() =>
             _groundedData.BaseSpeed * _stateMachine.ReusableData.MovementSpeedModifier;
 

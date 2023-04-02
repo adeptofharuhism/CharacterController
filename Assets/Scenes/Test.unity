@@ -1108,6 +1108,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 527066211}
   _data: {fileID: 11400000, guid: c84b333d00c51b74cae8c7d1f37a3827, type: 2}
+  _colliderUtility:
+    _capsuleColliderData:
+      _collider: {fileID: 527066212}
+    _defaultColliderData:
+      _height: 1.8
+      _centerY: 0.9
+      _radius: 0.2
+    _slopeData:
+      _stepHeightPercentage: 0.25
+      _floatRayDistance: 2
+      _stepReachForce: 25
+  _layerData:
+    _groundLayer:
+      serializedVersion: 2
+      m_Bits: 64
 --- !u!54 &527066211
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1135,9 +1150,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.2
-  m_Height: 1.8
+  m_Height: 1.3499999
   m_Direction: 1
-  m_Center: {x: 0, y: 0.9, z: 0}
+  m_Center: {x: 0, y: 1.125, z: 0}
 --- !u!1 &588692794
 GameObject:
   m_ObjectHideFlags: 0

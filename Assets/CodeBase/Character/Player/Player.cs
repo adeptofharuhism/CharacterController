@@ -1,4 +1,5 @@
-﻿using Assets.CodeBase.Character.States.Movement;
+﻿using Assets.CodeBase.Character.Data.ScriptableObjects;
+using Assets.CodeBase.Character.States.Movement;
 using Assets.CodeBase.Character.States.Movement.Grounded;
 using Assets.CodeBase.Infrastructure.Services;
 using Assets.CodeBase.Infrastructure.Services.Input;
@@ -9,6 +10,7 @@ namespace Assets.CodeBase.Character.Player
     public class Player : MonoBehaviour
     {
         [SerializeField] private Rigidbody _rigidbody;
+        [SerializeField] private UnitScriptableObject _data;
 
         private IInputService _inputService;
         private MovementStateMachine _movementStateMachine;
@@ -17,6 +19,7 @@ namespace Assets.CodeBase.Character.Player
         public IInputService InputService => _inputService;
         public Rigidbody Rigidbody => _rigidbody;
         public Transform MainCameraTransform => _mainCameraTransform;
+        public UnitScriptableObject Data => _data;
 
         private void Awake() {
             _inputService = AllServices.Container.Single<IInputService>();

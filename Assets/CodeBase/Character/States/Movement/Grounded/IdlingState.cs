@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded
 {
-    public class IdlingState : MovementState
+    public class IdlingState : GroundedState
     {
         public IdlingState(MovementStateMachine stateMachine) : base(stateMachine) {
         }
@@ -11,7 +11,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
         public override void Enter() {
             base.Enter();
 
-            _speedModifier = 0f;
+            _stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
             ResetVelocity();
         }
@@ -19,18 +19,10 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
         public override void Update() {
             base.Update();
 
-            if (_movementInput == Vector2.zero)
+            if (_stateMachine.ReusableData.MovementInput == Vector2.zero)
                 return;
 
             OnMove();
-        }
-
-        private void OnMove() {
-            if (_isWalking) {
-                _stateMachine.Enter<WalkingState>();
-            } else {
-                _stateMachine.Enter<RunningState>();
-            }
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
 {
-    public class WalkingState : MovementState
+    public class WalkingState : MovingState
     {
         public WalkingState(MovementStateMachine stateMachine) : base(stateMachine) {
         }
@@ -14,23 +14,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
         public override void Enter() {
             base.Enter();
 
-            _speedModifier = 0.225f;
-        }
-
-        protected override void AddInputActionsCallbacks() {
-            base.AddInputActionsCallbacks();
-
-            _stateMachine.Player.InputService.MovementCancelled += OnMovementCancelled;
-        }
-
-        protected override void RemoveInputActionsCallbacks() {
-            base.RemoveInputActionsCallbacks();
-
-            _stateMachine.Player.InputService.MovementCancelled -= OnMovementCancelled;
-        }
-
-        protected void OnMovementCancelled() {
-            _stateMachine.Enter<IdlingState>();
+            _stateMachine.ReusableData.MovementSpeedModifier = _groundedData.WalkData.SpeedModifier;
         }
 
         protected override void WalkToggle() {

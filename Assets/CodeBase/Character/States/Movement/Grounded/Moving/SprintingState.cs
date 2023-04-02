@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
 {
-    public class SprintingState : MovementState
+    public class SprintingState : MovingState
     {
         public SprintingState(MovementStateMachine stateMachine) : base(stateMachine) {
         }

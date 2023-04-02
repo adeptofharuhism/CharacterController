@@ -1,6 +1,6 @@
 ﻿namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
 {
-    public class RunningState : MovementState
+    public class RunningState : MovingState
     {
         public RunningState(MovementStateMachine stateMachine) : base(stateMachine) {
         }
@@ -8,23 +8,7 @@
         public override void Enter() {
             base.Enter();
 
-            _speedModifier = 1f;
-        }
-
-        protected override void AddInputActionsCallbacks() {
-            base.AddInputActionsCallbacks();
-
-            _stateMachine.Player.InputService.MovementCancelled += OnMovementCancelled;
-        }
-
-        protected override void RemoveInputActionsCallbacks() {
-            base.RemoveInputActionsCallbacks();
-
-            _stateMachine.Player.InputService.MovementCancelled -= OnMovementCancelled;
-        }
-
-        protected void OnMovementCancelled() {
-            _stateMachine.Enter<IdlingState>();
+            _stateMachine.ReusableData.MovementSpeedModifier = _groundedData.RunData.SpeedModifier;
         }
 
         protected override void WalkToggle() {

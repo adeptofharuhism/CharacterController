@@ -23,17 +23,21 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
             base.AddInputActionsCallbacks();
 
             _stateMachine.Player.InputService.MovementCancelled += OnMovementCancelled;
+            _stateMachine.Player.InputService.DashStarted += OnDashStarted;
         }
 
         protected override void RemoveInputActionsCallbacks() {
             base.RemoveInputActionsCallbacks();
 
             _stateMachine.Player.InputService.MovementCancelled -= OnMovementCancelled;
+            _stateMachine.Player.InputService.DashStarted -= OnDashStarted;
         }
 
-        protected virtual void OnMovementCancelled() {
+        protected virtual void OnMovementCancelled() => 
             _stateMachine.Enter<IdlingState>();
-        }
+
+        protected virtual void OnDashStarted() => 
+            _stateMachine.Enter<DashingState>();
 
         protected virtual void OnMove() {
             if (_stateMachine.ReusableData.IsWalking) {

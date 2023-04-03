@@ -1,4 +1,6 @@
-﻿namespace Assets.CodeBase.Infrastructure
+﻿using Assets.CodeBase.Infrastructure.Properties;
+
+namespace Assets.CodeBase.Infrastructure
 {
     public interface IExitableState
     {
@@ -19,7 +21,7 @@
     public interface IGameState : IGameExitableState, IState { }
     public interface IPayloadedGameState<TPayload> : IGameExitableState, IPayloadedState<TPayload> { }
 
-    public interface IUnitExitableState : IExitableState, IUpdatable { }
+    public interface IUnitExitableState : IExitableState, IUpdatable, IAnimationEventUser { }
     public interface IUnitState : IUnitExitableState, IState { }
     public interface IPayloadedUnitState<TPayload> : IUnitExitableState, IPayloadedState<TPayload> { }
 }

@@ -40,6 +40,18 @@ namespace Assets.CodeBase.Character.States.Movement
             Move();
         }
 
+        public virtual void OnAnimationEnterEvent() {
+
+        }
+
+        public virtual void OnAnimationExitEvent() {
+
+        }
+
+        public virtual void OnAnimationTransitEvent() {
+
+        }
+
         private void InitializeData() {
             _stateMachine.ReusableData.TimeToReachTargetRotation = _groundedData.BaseRotationData.TargetRotationReachTime;
         }

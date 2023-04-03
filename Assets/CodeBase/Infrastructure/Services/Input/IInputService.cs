@@ -9,8 +9,10 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
 
         event InputService.EventZeroParameters WalkToggleTriggered;
         event InputService.EventZeroParameters MovementCancelled;
+        event InputService.EventZeroParameters DashStarted;
 
         void Disable();
+        void DisableDashFor(float seconds);
         void Enable();
     }
 }

@@ -2,6 +2,7 @@
 using Assets.CodeBase.Character.States.Movement.Grounded;
 using Assets.CodeBase.Character.States.Movement.Grounded.Moving;
 using Assets.CodeBase.Infrastructure;
+using Assets.CodeBase.Infrastructure.Properties;
 using System;
 using System.Collections.Generic;
 
@@ -25,6 +26,7 @@ namespace Assets.CodeBase.Character.States.Movement
                 [typeof(WalkingState)] = new WalkingState(this),
                 [typeof(RunningState)] = new RunningState(this),
                 [typeof(SprintingState)] = new SprintingState(this),
+                [typeof(DashingState)] = new DashingState(this),
             };
         }
     }

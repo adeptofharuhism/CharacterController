@@ -11,7 +11,9 @@ namespace Assets.CodeBase.Character.Data.States.Grounded.Moving
     public class UnitRunData
     {
         [SerializeField] private float _speedModifier = 1f;
+        [SerializeField] private float _runToWalkTime = 1f;
 
         public float SpeedModifier => _speedModifier;
+        public float RunToWalkTime => _runToWalkTime;
     }
 }

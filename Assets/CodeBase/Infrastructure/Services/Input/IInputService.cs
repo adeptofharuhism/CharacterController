@@ -7,12 +7,15 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
         Vector2 MoveInputValue { get; }
         bool MoveInputTriggered { get; }
 
-        event InputService.EventZeroParameters WalkToggleTriggered;
-        event InputService.EventZeroParameters MovementCancelled;
-        event InputService.EventZeroParameters DashStarted;
+        delegate void EventZeroParameters();
+        event EventZeroParameters WalkToggleTriggered;
+        event EventZeroParameters MovementCancelled;
+        event EventZeroParameters DashStarted;
+        event EventZeroParameters SprintPerformed;
 
         void Disable();
         void DisableDashFor(float seconds);
         void Enable();
+        void Initialize();
     }
 }

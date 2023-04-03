@@ -12,6 +12,7 @@ namespace Assets.CodeBase.Character.Data.States.Grounded
         [SerializeField] private UnitWalkData _walkData;
         [SerializeField] private UnitRunData _runData;
         [SerializeField] private UnitDashData _dashData;
+        [SerializeField] private UnitSprintData _sprintData;
         [SerializeField] private AnimationCurve _slopeSpeedAngles;
 
         public float BaseSpeed => _baseSpeed;
@@ -19,6 +20,7 @@ namespace Assets.CodeBase.Character.Data.States.Grounded
         public UnitWalkData WalkData => _walkData;
         public UnitRunData RunData => _runData;
         public UnitDashData DashData => _dashData;
+        public UnitSprintData SprintData => _sprintData;
         public AnimationCurve SlopeSpeedAngles => _slopeSpeedAngles;
     }
 }

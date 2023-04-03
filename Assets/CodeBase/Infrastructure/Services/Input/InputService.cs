@@ -8,10 +8,10 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
         public bool MoveInputTriggered => _moveInputTriggered;
         public Vector2 MoveInputValue => _controls.Character.Move.ReadValue<Vector2>();
 
-        public delegate void EventZeroParameters();
-        public event EventZeroParameters WalkToggleTriggered;
-        public event EventZeroParameters MovementCancelled;
-        public event EventZeroParameters DashStarted;
+        public event IInputService.EventZeroParameters WalkToggleTriggered;
+        public event IInputService.EventZeroParameters MovementCancelled;
+        public event IInputService.EventZeroParameters DashStarted;
+        public event IInputService.EventZeroParameters SprintPerformed;
 
         private Controls _controls;
         private bool _moveInputTriggered = false;
@@ -22,7 +22,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
             _controls = new Controls();
         }
 
-        public void Enable() {
+        public void Initialize() {
             _controls.Character.Move.started += _ => _moveInputTriggered = true;
             _controls.Character.Move.canceled += _ => _moveInputTriggered = false;
 
@@ -30,14 +30,14 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
 
             _controls.Character.Dash.started += _ => HandleDashStarted();
 
+            _controls.Character.Sprint.performed += _ =>SprintPerformed?.Invoke();
+
             _controls.Character.WalkToggle.started += _ => WalkToggleTriggered?.Invoke();
-
-            _controls.Enable();
         }
 
-        public void Disable() {
-            _controls.Disable();
-        }
+        public void Enable() => _controls.Enable();
+
+        public void Disable() => _controls.Disable();
 
         public void DisableDashFor(float seconds) => 
             _timeByWhichDashDisabled = Time.time + seconds;

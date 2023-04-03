@@ -20,6 +20,13 @@ MonoBehaviour:
       _speedModifier: 0.225
     _runData:
       _speedModifier: 1
+    _dashData:
+      _speedModifier: 2
+      _consecutiveTime: 1
+      _consecutiveDashesLimitAmount: 2
+      _dashLimitReachedCooldown: 0.75
+    _sprintData:
+      _speedModifier: 1.7
     _slopeSpeedAngles:
       serializedVersion: 2
       m_Curve:

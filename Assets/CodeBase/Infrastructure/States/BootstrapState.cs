@@ -32,7 +32,14 @@ namespace Assets.CodeBase.Infrastructure.States
 
         private void RegisterServices() {
             _services.RegisterSingle<IStateMachine>(_stateMachine);
-            _services.RegisterSingle<IInputService>(new InputService());
+            _services.RegisterSingle(PrepareInputService());
+        }
+
+        private IInputService PrepareInputService() {
+            IInputService inputService = new InputService();
+            inputService.Initialize();
+
+            return inputService;
         }
     }
 }

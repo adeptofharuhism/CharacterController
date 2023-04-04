@@ -1,4 +1,5 @@
 ﻿using Assets.CodeBase.Character.Data.States.Grounded.Moving;
+using Assets.CodeBase.Character.States.Movement.Grounded.Stopping;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
@@ -57,6 +58,10 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
 
         private void OnSprintPerformed() {
             _keepSprinting = true;
+        }
+
+        protected override void OnMovementCancelled() {
+            _stateMachine.Enter<HardStoppingState>();
         }
     }
 }

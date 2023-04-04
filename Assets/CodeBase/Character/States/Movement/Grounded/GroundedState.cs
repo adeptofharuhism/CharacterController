@@ -1,6 +1,5 @@
 ﻿using Assets.CodeBase.Character.States.Movement.Grounded.Moving;
 using Assets.CodeBase.Utility.Colliders;
-using System;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded

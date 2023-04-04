@@ -1,5 +1,6 @@
 ﻿using Assets.CodeBase.Character.Data.States.Grounded;
 using Assets.CodeBase.Character.States.Movement.Grounded.Moving;
+using Assets.CodeBase.Character.States.Movement.Grounded.Stopping;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded
@@ -27,10 +28,8 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
         }
 
         public override void OnAnimationTransitEvent() {
-            base.OnAnimationTransitEvent();
-
             if (_stateMachine.ReusableData.MovementInput == Vector2.zero)
-                _stateMachine.Enter<IdlingState>();
+                _stateMachine.Enter<HardStoppingState>();
             else _stateMachine.Enter<SprintingState>();
         }
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Assets.CodeBase.Character.States.Movement.Grounded.Stopping;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
 {
@@ -15,6 +11,10 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
             base.Enter();
 
             _stateMachine.ReusableData.MovementSpeedModifier = _groundedData.WalkData.SpeedModifier;
+        }
+
+        protected override void OnMovementCancelled() {
+            _stateMachine.Enter<LightStoppingState>();
         }
 
         protected override void WalkToggle() {

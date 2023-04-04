@@ -1,4 +1,5 @@
 ﻿using Assets.CodeBase.Character.Data.States.Grounded.Moving;
+using Assets.CodeBase.Character.Data.States.Grounded.Stopping;
 using System;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace Assets.CodeBase.Character.Data.States.Grounded
         [SerializeField] private UnitDashData _dashData;
         [SerializeField] private UnitSprintData _sprintData;
         [SerializeField] private AnimationCurve _slopeSpeedAngles;
+        [SerializeField] private UnitStopData _stopData;
 
         public float BaseSpeed => _baseSpeed;
         public UnitRotationData BaseRotationData => _baseRotationData;
@@ -22,5 +24,6 @@ namespace Assets.CodeBase.Character.Data.States.Grounded
         public UnitDashData DashData => _dashData;
         public UnitSprintData SprintData => _sprintData;
         public AnimationCurve SlopeSpeedAngles => _slopeSpeedAngles;
+        public UnitStopData StopData => _stopData;
     }
 }

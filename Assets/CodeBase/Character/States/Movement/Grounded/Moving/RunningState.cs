@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Assets.CodeBase.Character.States.Movement.Grounded.Stopping;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
@@ -32,6 +32,10 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
             if (_stateMachine.ReusableData.MovementInput == Vector2.zero)
                 _stateMachine.Enter<IdlingState>();
             else _stateMachine.Enter<WalkingState>();
+        }
+
+        protected override void OnMovementCancelled() {
+            _stateMachine.Enter<MediumStoppingState>();
         }
 
         protected override void WalkToggle() {

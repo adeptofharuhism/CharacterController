@@ -12,6 +12,7 @@ namespace Assets.CodeBase.Character.Data.States
         public Vector2 MovementInput { get; set; }
         public float MovementSpeedModifier { get; set; } = 1f;
         public float MovementOnSlopesSpeedModifier { get; set; } = 1f;
+        public float MovementDecelerationForce { get; set; } = 1f;
         public bool IsWalking{ get; set; }
 
         public ref Vector3 CurrentTargetRotation {

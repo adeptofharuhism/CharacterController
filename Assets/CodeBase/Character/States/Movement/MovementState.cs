@@ -148,6 +148,21 @@ namespace Assets.CodeBase.Character.States.Movement
             return playerHorizontalVelocity;
         }
 
+        protected void DecelerateHorizontally() {
+            Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
+
+            _stateMachine.Player.Rigidbody.AddForce(
+                -playerHorizontalVelocity * _stateMachine.ReusableData.MovementDecelerationForce,
+                ForceMode.Acceleration);
+        }
+
+        protected bool IsMovingHorizontally(float minimalMagnitude = .14f) {
+            Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
+            Vector2 playerHorizontalMovement = new Vector2(playerHorizontalVelocity.x, playerHorizontalVelocity.z);
+
+            return playerHorizontalMovement.sqrMagnitude > minimalMagnitude;
+        }
+
         protected Vector3 GetPlayerVerticalVelocity() =>
             new Vector3(0f, _stateMachine.Player.Rigidbody.velocity.y, 0f);
 

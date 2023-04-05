@@ -9,6 +9,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
 
         public event IInputService.EventZeroParameters WalkToggleTriggered;
         public event IInputService.EventZeroParameters MovementStarted;
+        public event IInputService.EventZeroParameters MovementPerformed;
         public event IInputService.EventZeroParameters MovementCancelled;
         public event IInputService.EventZeroParameters DashStarted;
         public event IInputService.EventZeroParameters SprintPerformed;
@@ -27,6 +28,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
             _controls.Character.Move.canceled += _ => _moveInputTriggered = false;
 
             _controls.Character.Move.started += _ => MovementStarted?.Invoke();
+            _controls.Character.Move.performed += _ => MovementPerformed?.Invoke();
             _controls.Character.Move.canceled += _ => MovementCancelled?.Invoke();
 
             _controls.Character.Dash.started += _ => HandleDashStarted();

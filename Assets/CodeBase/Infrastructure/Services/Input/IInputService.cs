@@ -13,6 +13,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
         event EventZeroParameters DashStarted;
         event EventZeroParameters SprintPerformed;
         event EventZeroParameters MovementStarted;
+        event EventZeroParameters MovementPerformed;
 
         void Disable();
         void DisableDashFor(float seconds);

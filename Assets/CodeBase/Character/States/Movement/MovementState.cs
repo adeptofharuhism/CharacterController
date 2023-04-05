@@ -53,6 +53,11 @@ namespace Assets.CodeBase.Character.States.Movement
         }
 
         private void InitializeData() {
+            SetBaseRotationData();
+        }
+
+        protected void SetBaseRotationData() {
+            _stateMachine.ReusableData.RotationData = _groundedData.BaseRotationData;
             _stateMachine.ReusableData.TimeToReachTargetRotation = _groundedData.BaseRotationData.TargetRotationReachTime;
         }
 

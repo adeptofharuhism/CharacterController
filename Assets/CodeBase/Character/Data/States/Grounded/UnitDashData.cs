@@ -14,10 +14,13 @@ namespace Assets.CodeBase.Character.Data.States.Grounded
         private int _consecutiveDashesLimitAmount = 2;
         [SerializeField, Range(0f, 5f)]
         private float _dashLimitReachedCooldown = 0.75f;
+        [SerializeField]
+        private UnitRotationData _rotationData;
 
         public float SpeedModifier => _speedModifier;
         public float ConsecutiveTime => _consecutiveTime;
         public int ConsecutiveDashesLimitAmount => _consecutiveDashesLimitAmount;
         public float DashLimitReachedCooldown => _dashLimitReachedCooldown;
+        public UnitRotationData RotationData => _rotationData;
     }
 }

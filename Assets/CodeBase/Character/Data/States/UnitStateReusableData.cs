@@ -13,14 +13,15 @@ namespace Assets.CodeBase.Character.Data.States
         public float MovementSpeedModifier { get; set; } = 1f;
         public float MovementOnSlopesSpeedModifier { get; set; } = 1f;
         public float MovementDecelerationForce { get; set; } = 1f;
-        public bool IsWalking{ get; set; }
+        public bool IsWalking { get; set; }
+        public UnitRotationData RotationData { get; set; }
 
         public ref Vector3 CurrentTargetRotation {
             get {
                 return ref _currentTargetRotation;
             }
         }
-        
+
         public ref Vector3 TimeToReachTargetRotation {
             get {
                 return ref _timeToReachTargetRotation;

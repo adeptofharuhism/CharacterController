@@ -55,6 +55,10 @@ namespace Assets.CodeBase.Character.Player
             _movementStateMachine.PhysicsUpdate();
         }
 
+        private void OnTriggerEnter(Collider collider) {
+            _movementStateMachine.OnTriggerEnter(collider);
+        }
+
         private void OnValidate() {
             _colliderUtility.Initialize();
             _colliderUtility.CalculateCapsuleColliderDimensions();

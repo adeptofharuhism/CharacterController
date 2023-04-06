@@ -10,6 +10,7 @@
 
             _stateMachine.ReusableData.MovementDecelerationForce =
                 _stateMachine.Player.Data.GroundedData.StopData.MediumDecelerationForce;
+            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.MediumForce;
         }
     }
 }

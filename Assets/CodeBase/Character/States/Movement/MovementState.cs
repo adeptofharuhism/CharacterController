@@ -1,5 +1,7 @@
-﻿using Assets.CodeBase.Character.Data.States.Grounded;
+﻿using Assets.CodeBase.Character.Data.States.Airborne;
+using Assets.CodeBase.Character.Data.States.Grounded;
 using Assets.CodeBase.Infrastructure;
+using System;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement
@@ -9,11 +11,13 @@ namespace Assets.CodeBase.Character.States.Movement
         protected readonly MovementStateMachine _stateMachine;
 
         protected UnitGroundedData _groundedData;
+        protected UnitAirborneData _airborneData;
 
         public MovementState(MovementStateMachine stateMachine) {
             _stateMachine = stateMachine;
 
             _groundedData = _stateMachine.Player.Data.GroundedData;
+            _airborneData = _stateMachine.Player.Data.AirborneData;
 
             InitializeData();
         }
@@ -40,26 +44,20 @@ namespace Assets.CodeBase.Character.States.Movement
             Move();
         }
 
-        public virtual void OnAnimationEnterEvent() {
+        public virtual void OnAnimationEnterEvent() { }
 
+        public virtual void OnAnimationExitEvent() { }
+
+        public virtual void OnAnimationTransitEvent() { }
+
+        public virtual void OnTriggerEnter(Collider collider) {
+            if (_stateMachine.Player.LayerData.IsGroundLayer(collider.gameObject.layer))
+                OnContactWithGround(collider);
         }
 
-        public virtual void OnAnimationExitEvent() {
+        public virtual void OnTriggerExit(Collider collider) { }
 
-        }
-
-        public virtual void OnAnimationTransitEvent() {
-
-        }
-
-        private void InitializeData() {
-            SetBaseRotationData();
-        }
-
-        protected void SetBaseRotationData() {
-            _stateMachine.ReusableData.RotationData = _groundedData.BaseRotationData;
-            _stateMachine.ReusableData.TimeToReachTargetRotation = _groundedData.BaseRotationData.TargetRotationReachTime;
-        }
+        private void InitializeData() => SetBaseRotationData();
 
         private void ReadMovementInput() {
             _stateMachine.ReusableData.MovementInput = _stateMachine.Player.InputService.MoveInputValue;
@@ -112,6 +110,11 @@ namespace Assets.CodeBase.Character.States.Movement
             return directionAngle;
         }
 
+        protected void SetBaseRotationData() {
+            _stateMachine.ReusableData.RotationData = _groundedData.BaseRotationData;
+            _stateMachine.ReusableData.TimeToReachTargetRotation = _groundedData.BaseRotationData.TargetRotationReachTime;
+        }
+
         protected float UpdateTargetRotation(Vector3 direction, bool shouldConsiderCameraRotation = true) {
             float directionAngle = GetDirectionAngle(direction);
 
@@ -161,12 +164,26 @@ namespace Assets.CodeBase.Character.States.Movement
                 ForceMode.Acceleration);
         }
 
+        protected void DecelerateVertically() {
+            Vector3 playerVerticalVelocity = GetPlayerVerticalVelocity();
+
+            _stateMachine.Player.Rigidbody.AddForce(
+                -playerVerticalVelocity * _stateMachine.ReusableData.MovementDecelerationForce,
+                ForceMode.Acceleration);
+        }
+
         protected bool IsMovingHorizontally(float minimalMagnitude = .14f) {
             Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
             Vector2 playerHorizontalMovement = new Vector2(playerHorizontalVelocity.x, playerHorizontalVelocity.z);
 
             return playerHorizontalMovement.sqrMagnitude > minimalMagnitude;
         }
+
+        protected bool IsMovingUp(float minimalVelocity = .1f) =>
+            GetPlayerVerticalVelocity().y > minimalVelocity;
+
+        protected bool IsMovingDown(float minimalVelocity = .1f) =>
+            GetPlayerVerticalVelocity().y < minimalVelocity;
 
         protected Vector3 GetPlayerVerticalVelocity() =>
             new Vector3(0f, _stateMachine.Player.Rigidbody.velocity.y, 0f);
@@ -180,13 +197,13 @@ namespace Assets.CodeBase.Character.States.Movement
         protected void ResetVelocity() =>
             _stateMachine.Player.Rigidbody.velocity = Vector3.zero;
 
-        protected virtual void AddInputActionsCallbacks() {
-            _stateMachine.Player.InputService.WalkToggleTriggered += WalkToggle;
-        }
+        protected virtual void OnContactWithGround(Collider collider) { }
 
-        protected virtual void RemoveInputActionsCallbacks() {
+        protected virtual void AddInputActionsCallbacks() => 
+            _stateMachine.Player.InputService.WalkToggleTriggered += WalkToggle;
+
+        protected virtual void RemoveInputActionsCallbacks() => 
             _stateMachine.Player.InputService.WalkToggleTriggered -= WalkToggle;
-        }
 
         protected virtual void WalkToggle() =>
             _stateMachine.ReusableData.IsWalking = !_stateMachine.ReusableData.IsWalking;

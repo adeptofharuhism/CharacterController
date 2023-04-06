@@ -1,5 +1,7 @@
-﻿using Assets.CodeBase.Character.States.Movement.Grounded.Moving;
+﻿using Assets.CodeBase.Character.States.Movement.Airborne;
+using Assets.CodeBase.Character.States.Movement.Grounded.Moving;
 using Assets.CodeBase.Utility.Colliders;
+using System;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded
@@ -10,6 +12,12 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
 
         public GroundedState(MovementStateMachine stateMachine) : base(stateMachine) {
             _slopeData = stateMachine.Player.ColliderUtility.SlopeData;
+        }
+
+        public override void Enter() {
+            base.Enter();
+
+            UpdateIsSprintingFlag();
         }
 
         public override void PhysicsUpdate() {
@@ -23,6 +31,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
 
             _stateMachine.Player.InputService.MovementCancelled += OnMovementCancelled;
             _stateMachine.Player.InputService.DashStarted += OnDashStarted;
+            _stateMachine.Player.InputService.JumpStarted += OnJumpStarted;
         }
 
         protected override void RemoveInputActionsCallbacks() {
@@ -30,31 +39,47 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
 
             _stateMachine.Player.InputService.MovementCancelled -= OnMovementCancelled;
             _stateMachine.Player.InputService.DashStarted -= OnDashStarted;
+            _stateMachine.Player.InputService.JumpStarted -= OnJumpStarted;
         }
 
-        protected virtual void OnMovementCancelled() => 
+        protected virtual void OnJumpStarted() =>
+            _stateMachine.Enter<JumpingState>();
+
+        protected virtual void OnMovementCancelled() =>
             _stateMachine.Enter<IdlingState>();
 
-        protected virtual void OnDashStarted() => 
+        protected virtual void OnDashStarted() =>
             _stateMachine.Enter<DashingState>();
 
         protected virtual void OnMove() {
-            if (_stateMachine.ReusableData.IsWalking) {
+            if (_stateMachine.ReusableData.IsSprinting) {
+                _stateMachine.Enter<SprintingState>();
+            } else if (_stateMachine.ReusableData.IsWalking) {
                 _stateMachine.Enter<WalkingState>();
             } else {
                 _stateMachine.Enter<RunningState>();
             }
         }
 
+        private void UpdateIsSprintingFlag() {
+            if (!_stateMachine.ReusableData.IsSprinting)
+                return;
+
+            if (_stateMachine.ReusableData.MovementInput != Vector2.zero)
+                return;
+
+            _stateMachine.ReusableData.IsSprinting = false;
+        }
+
         private void FloatCapsule() {
             Vector3 capsuleColliderCenter = _stateMachine.Player.ColliderUtility.CapsuleColliderData.Collider.bounds.center;
 
-            Ray downwardsFromCapsuleCenter = new Ray(capsuleColliderCenter, Vector3.down);
+            Ray downwardsFromCapsuleCenter = new(capsuleColliderCenter, Vector3.down);
 
             if (Physics.Raycast(
-                downwardsFromCapsuleCenter, 
-                out RaycastHit hit, 
-                _slopeData.FloatRayDistance, 
+                downwardsFromCapsuleCenter,
+                out RaycastHit hit,
+                _slopeData.FloatRayDistance,
                 _stateMachine.Player.LayerData.GroundLayer,
                 QueryTriggerInteraction.Ignore)) {
 
@@ -64,8 +89,8 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
                 if (slopeSpeedModifier == 0f)
                     return;
 
-                float distanceToFloatingPoint = 
-                    _stateMachine.Player.ColliderUtility.CapsuleColliderData.ColliderCenterInLocalSpace.y * 
+                float distanceToFloatingPoint =
+                    _stateMachine.Player.ColliderUtility.CapsuleColliderData.ColliderCenterInLocalSpace.y *
                     _stateMachine.Player.transform.localScale.y - hit.distance;
 
                 if (distanceToFloatingPoint == 0f)
@@ -73,7 +98,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
 
                 float amountToLift = distanceToFloatingPoint * _slopeData.StepReachForce - GetPlayerVerticalVelocity().y;
 
-                Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
+                Vector3 liftForce = new(0f, amountToLift, 0f);
 
                 _stateMachine.Player.Rigidbody.AddForce(liftForce, ForceMode.VelocityChange);
             }

@@ -12,6 +12,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Stopping
 
             _stateMachine.ReusableData.MovementDecelerationForce =
                 _stateMachine.Player.Data.GroundedData.StopData.HardDecelerationForce;
+            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.StrongForce;
         }
 
         protected override void OnMove() {

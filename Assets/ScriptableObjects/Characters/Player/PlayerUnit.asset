@@ -20,13 +20,17 @@ MonoBehaviour:
       _speedModifier: 0.225
     _runData:
       _speedModifier: 1
+      _runToWalkTime: 1
     _dashData:
       _speedModifier: 2
       _consecutiveTime: 1
       _consecutiveDashesLimitAmount: 2
       _dashLimitReachedCooldown: 0.75
+      _rotationData:
+        _targetRotationReachTime: {x: 0, y: 0.02, z: 0}
     _sprintData:
       _speedModifier: 1.7
+      _sprintToRunTime: 1
     _slopeSpeedAngles:
       serializedVersion: 2
       m_Curve:
@@ -78,3 +82,73 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    _stopData:
+      _lightDecelerationForce: 5
+      _mediumDecelerationForce: 6.5
+      _hardDecelerationForce: 5
+  _airborneData:
+    _jumpData:
+      _stationaryForce: {x: 0, y: 5, z: 0}
+      _weakForce: {x: 1, y: 5, z: 1}
+      _mediumForce: {x: 3.5, y: 5, z: 3.5}
+      _strongForce: {x: 5, y: 5, z: 5}
+      _rotationData:
+        _targetRotationReachTime: {x: 0, y: 0.02, z: 0}
+      _jumpToGroundRayDistance: 2
+      _jumpForceModifierOnSlopeUpwards:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: -0.0125
+          outSlope: -0.0125
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 20
+          value: 0.75
+          inSlope: Infinity
+          outSlope: Infinity
+          tangentMode: 103
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 35.1
+          value: 0.5
+          inSlope: Infinity
+          outSlope: Infinity
+          tangentMode: 103
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 75.1
+          value: 1
+          inSlope: Infinity
+          outSlope: Infinity
+          tangentMode: 1
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 90
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _jumpForceModifierOnSlopeDownwards:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4

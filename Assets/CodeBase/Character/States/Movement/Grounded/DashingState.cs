@@ -24,6 +24,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
 
             _stateMachine.ReusableData.MovementSpeedModifier = _dashData.SpeedModifier;
             _stateMachine.ReusableData.RotationData = _dashData.RotationData;
+            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.StrongForce;
 
             AddForceOnTransitionFromIdleState();
             UpdateConsecutiveDashes();

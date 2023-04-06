@@ -14,6 +14,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
             base.Enter();
 
             _stateMachine.ReusableData.MovementSpeedModifier = _groundedData.RunData.SpeedModifier;
+            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.MediumForce;
 
             _startTime = Time.time;
         }

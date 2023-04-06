@@ -9,6 +9,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
         private UnitSprintData _sprintData;
 
         private bool _keepSprinting = false;
+        private bool _shouldResetSprintingState = false;
         private float _startTime;
 
         public SprintingState(MovementStateMachine stateMachine) : base(stateMachine) {
@@ -19,13 +20,20 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
             base.Enter();
 
             _stateMachine.ReusableData.MovementSpeedModifier = _sprintData.SpeedModifier;
+            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.StrongForce;
+
+            _shouldResetSprintingState = true;
+
             _startTime = Time.time;
         }
 
         public override void Exit() {
             base.Exit();
 
-            _keepSprinting = false;
+            if (_shouldResetSprintingState) {
+                _stateMachine.ReusableData.IsSprinting = false;
+                _keepSprinting = false;
+            }
         }
 
         public override void Update() {
@@ -58,10 +66,16 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
 
         private void OnSprintPerformed() {
             _keepSprinting = true;
+
+            _stateMachine.ReusableData.IsSprinting = true;
         }
 
-        protected override void OnMovementCancelled() {
-            _stateMachine.Enter<HardStoppingState>();
+        protected override void OnJumpStarted() {
+            _shouldResetSprintingState = false;
+            base.OnJumpStarted();
         }
+
+        protected override void OnMovementCancelled() => 
+            _stateMachine.Enter<HardStoppingState>();
     }
 }

@@ -13,6 +13,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
         public event IInputService.EventZeroParameters MovementCancelled;
         public event IInputService.EventZeroParameters DashStarted;
         public event IInputService.EventZeroParameters SprintPerformed;
+        public event IInputService.EventZeroParameters JumpStarted;
 
         private Controls _controls;
         private bool _moveInputTriggered = false;
@@ -30,6 +31,8 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
             _controls.Character.Move.started += _ => MovementStarted?.Invoke();
             _controls.Character.Move.performed += _ => MovementPerformed?.Invoke();
             _controls.Character.Move.canceled += _ => MovementCancelled?.Invoke();
+
+            _controls.Character.Jump.started += _ => JumpStarted?.Invoke();
 
             _controls.Character.Dash.started += _ => HandleDashStarted();
 

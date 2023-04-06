@@ -9,11 +9,13 @@ namespace Assets.CodeBase.Character.Data.States
         private Vector3 _dampedTargetRotationCurrentVelocity;
         private Vector3 _dampedTargetRotationPassedTime;
 
+        public Vector3 CurrentJumpForce { get; set; }
         public Vector2 MovementInput { get; set; }
         public float MovementSpeedModifier { get; set; } = 1f;
         public float MovementOnSlopesSpeedModifier { get; set; } = 1f;
         public float MovementDecelerationForce { get; set; } = 1f;
         public bool IsWalking { get; set; }
+        public bool IsSprinting { get; set; }
         public UnitRotationData RotationData { get; set; }
 
         public ref Vector3 CurrentTargetRotation {

@@ -1,4 +1,5 @@
 ﻿using Assets.CodeBase.Character.Data.States;
+using Assets.CodeBase.Character.States.Movement.Airborne;
 using Assets.CodeBase.Character.States.Movement.Grounded;
 using Assets.CodeBase.Character.States.Movement.Grounded.Moving;
 using Assets.CodeBase.Character.States.Movement.Grounded.Stopping;
@@ -32,6 +33,8 @@ namespace Assets.CodeBase.Character.States.Movement
                 [typeof(LightStoppingState)] = new LightStoppingState(this),
                 [typeof(MediumStoppingState)] = new MediumStoppingState(this),
                 [typeof(HardStoppingState)] = new HardStoppingState(this),
+
+                [typeof(JumpingState)] = new JumpingState(this),
             };
         }
     }

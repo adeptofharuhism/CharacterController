@@ -10,6 +10,8 @@
 
             _stateMachine.ReusableData.MovementDecelerationForce =
                 _stateMachine.Player.Data.GroundedData.StopData.LightDecelerationForce;
+
+            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.WeakForce;
         }
     }
 }

@@ -55,13 +55,15 @@ namespace Assets.CodeBase.Character.States.Movement
                 OnContactWithGround(collider);
         }
 
-        public virtual void OnTriggerExit(Collider collider) { }
+        public virtual void OnTriggerExit(Collider collider) {
+            if (_stateMachine.Player.LayerData.IsGroundLayer(collider.gameObject.layer))
+                OnLostContactWithGround(collider);
+        }
 
         private void InitializeData() => SetBaseRotationData();
 
-        private void ReadMovementInput() {
+        private void ReadMovementInput() =>
             _stateMachine.ReusableData.MovementInput = _stateMachine.Player.InputService.MoveInputValue;
-        }
 
         private void Move() {
             if (_stateMachine.ReusableData.MovementInput == Vector2.zero || _stateMachine.ReusableData.MovementSpeedModifier == 0f)
@@ -197,12 +199,17 @@ namespace Assets.CodeBase.Character.States.Movement
         protected void ResetVelocity() =>
             _stateMachine.Player.Rigidbody.velocity = Vector3.zero;
 
+        protected void ResetVertivalVelocity() => 
+            _stateMachine.Player.Rigidbody.velocity = GetPlayerHorizontalVelocity();
+
         protected virtual void OnContactWithGround(Collider collider) { }
 
-        protected virtual void AddInputActionsCallbacks() => 
+        protected virtual void OnLostContactWithGround(Collider collider) { }
+
+        protected virtual void AddInputActionsCallbacks() =>
             _stateMachine.Player.InputService.WalkToggleTriggered += WalkToggle;
 
-        protected virtual void RemoveInputActionsCallbacks() => 
+        protected virtual void RemoveInputActionsCallbacks() =>
             _stateMachine.Player.InputService.WalkToggleTriggered -= WalkToggle;
 
         protected virtual void WalkToggle() =>

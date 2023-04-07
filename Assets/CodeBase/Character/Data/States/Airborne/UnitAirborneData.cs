@@ -11,7 +11,9 @@ namespace Assets.CodeBase.Character.Data.States.Airborne
     public class UnitAirborneData
     {
         [SerializeField] private UnitJumpData _jumpData;
+        [SerializeField] private UnitFallData _fallData;
 
         public UnitJumpData JumpData => _jumpData;
+        public UnitFallData FallData => _fallData;
     }
 }

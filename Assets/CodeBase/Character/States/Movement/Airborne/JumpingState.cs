@@ -7,6 +7,7 @@ namespace Assets.CodeBase.Character.States.Movement.Airborne
     {
         private UnitJumpData _jumpData;
         private bool _shouldKeepRotating;
+        private bool _canStartFalling;
 
         public JumpingState(MovementStateMachine stateMachine) : base(stateMachine) {
             _jumpData = _airborneData.JumpData;
@@ -28,6 +29,19 @@ namespace Assets.CodeBase.Character.States.Movement.Airborne
             base.Exit();
 
             SetBaseRotationData();
+            _canStartFalling = false;
+        }
+
+        public override void Update() {
+            base.Update();
+
+            if (!_canStartFalling && IsMovingUp())
+                _canStartFalling = true;
+
+            if (!_canStartFalling || GetPlayerVerticalVelocity().y > 0)
+                return;
+
+            _stateMachine.Enter<FallingState>();
         }
 
         public override void PhysicsUpdate() {

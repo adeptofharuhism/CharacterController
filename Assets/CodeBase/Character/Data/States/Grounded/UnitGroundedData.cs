@@ -9,6 +9,7 @@ namespace Assets.CodeBase.Character.Data.States.Grounded
     public class UnitGroundedData
     {
         [SerializeField] private float _baseSpeed = 5f;
+        [SerializeField] private float _groundToFallRayDistance = 1f;
         [SerializeField] private UnitRotationData _baseRotationData;
         [SerializeField] private UnitWalkData _walkData;
         [SerializeField] private UnitRunData _runData;
@@ -18,6 +19,7 @@ namespace Assets.CodeBase.Character.Data.States.Grounded
         [SerializeField] private UnitStopData _stopData;
 
         public float BaseSpeed => _baseSpeed;
+        public float GroundToFallRayDistance => _groundToFallRayDistance;
         public UnitRotationData BaseRotationData => _baseRotationData;
         public UnitWalkData WalkData => _walkData;
         public UnitRunData RunData => _runData;

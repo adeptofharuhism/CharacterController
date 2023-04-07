@@ -1,4 +1,5 @@
-﻿using Assets.CodeBase.Character.Data.Layers;
+﻿using Assets.CodeBase.Character.Data.Colliders;
+using Assets.CodeBase.Character.Data.Layers;
 using Assets.CodeBase.Character.Data.ScriptableObjects;
 using Assets.CodeBase.Character.States.Movement;
 using Assets.CodeBase.Character.States.Movement.Grounded;
@@ -17,7 +18,7 @@ namespace Assets.CodeBase.Character.Player
         private UnitScriptableObject _data;
 
         [SerializeField, Header("Collisions")]
-        private CapsuleColliderUtility _colliderUtility;
+        private UnitCapsuleColliderUtility _colliderUtility;
         [SerializeField] private UnitLayerData _layerData;
 
         private IInputService _inputService;
@@ -28,7 +29,7 @@ namespace Assets.CodeBase.Character.Player
         public Rigidbody Rigidbody => _rigidbody;
         public Transform MainCameraTransform => _mainCameraTransform;
         public UnitScriptableObject Data => _data;
-        public CapsuleColliderUtility ColliderUtility => _colliderUtility;
+        public UnitCapsuleColliderUtility ColliderUtility => _colliderUtility;
         public UnitLayerData LayerData => _layerData;
 
         private void Awake() {
@@ -55,9 +56,9 @@ namespace Assets.CodeBase.Character.Player
             _movementStateMachine.PhysicsUpdate();
         }
 
-        private void OnTriggerEnter(Collider collider) {
-            _movementStateMachine.OnTriggerEnter(collider);
-        }
+        private void OnTriggerEnter(Collider collider) => _movementStateMachine.OnTriggerEnter(collider);
+
+        private void OnTriggerExit(Collider collider) => _movementStateMachine.OnTriggerExit(collider);
 
         private void OnValidate() {
             _colliderUtility.Initialize();

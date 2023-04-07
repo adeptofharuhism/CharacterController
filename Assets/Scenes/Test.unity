@@ -1165,6 +1165,8 @@ MonoBehaviour:
       _stepHeightPercentage: 0.25
       _floatRayDistance: 2
       _stepReachForce: 25
+    _triggerColliderData:
+      _groundCheckCollider: {fileID: 105048093}
   _layerData:
     _groundLayer:
       serializedVersion: 2

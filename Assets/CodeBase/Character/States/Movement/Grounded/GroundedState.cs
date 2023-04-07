@@ -42,6 +42,49 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
             _stateMachine.Player.InputService.JumpStarted -= OnJumpStarted;
         }
 
+        protected override void OnLostContactWithGround(Collider collider) {
+            Vector3 capsuleColliderCenterInWorldSpace =
+                _stateMachine.Player.ColliderUtility.CapsuleColliderData.Collider.bounds.center;
+
+            if (IsThereGroundUnderneath())
+                return;
+
+            Ray downwardsRayFromCapsuleBottom =
+                new Ray(
+                    capsuleColliderCenterInWorldSpace -
+                    _stateMachine.
+                        Player.ColliderUtility.CapsuleColliderData.ColliderVerticalExtents,
+                    Vector3.down);
+
+            if (!Physics.Raycast(
+                downwardsRayFromCapsuleBottom,
+                out _,
+                _groundedData.GroundToFallRayDistance,
+                _stateMachine.Player.LayerData.GroundLayer,
+                QueryTriggerInteraction.Ignore))
+                OnFall();
+        }
+
+        private bool IsThereGroundUnderneath() {
+            BoxCollider groundCheckCollider = _stateMachine.Player.ColliderUtility.TriggerColliderData.GroundCheckCollider;
+
+            Vector3 groundColliderCenterInWorldspace =
+                groundCheckCollider.bounds.center;
+
+            Collider[] overlappedGroundCollider =
+                Physics.OverlapBox(
+                    groundColliderCenterInWorldspace,
+                    groundCheckCollider.bounds.extents,
+                    groundCheckCollider.transform.rotation,
+                    _stateMachine.Player.LayerData.GroundLayer,
+                    QueryTriggerInteraction.Ignore);
+
+            return overlappedGroundCollider.Length > 0;
+        }
+
+        protected virtual void OnFall() =>
+            _stateMachine.Enter<FallingState>();
+
         protected virtual void OnJumpStarted() =>
             _stateMachine.Enter<JumpingState>();
 

@@ -35,6 +35,7 @@ namespace Assets.CodeBase.Character.States.Movement
                 [typeof(HardStoppingState)] = new HardStoppingState(this),
 
                 [typeof(JumpingState)] = new JumpingState(this),
+                [typeof(FallingState)] = new FallingState(this),
             };
         }
     }

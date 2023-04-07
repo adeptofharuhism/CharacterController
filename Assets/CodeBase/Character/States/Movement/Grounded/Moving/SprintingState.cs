@@ -77,5 +77,11 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
 
         protected override void OnMovementCancelled() => 
             _stateMachine.Enter<HardStoppingState>();
+
+        protected override void OnFall() {
+            _shouldResetSprintingState = false;
+
+            base.OnFall();
+        }
     }
 }

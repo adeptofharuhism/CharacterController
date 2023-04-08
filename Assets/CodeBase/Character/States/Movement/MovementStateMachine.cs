@@ -1,6 +1,7 @@
 ﻿using Assets.CodeBase.Character.Data.States;
 using Assets.CodeBase.Character.States.Movement.Airborne;
 using Assets.CodeBase.Character.States.Movement.Grounded;
+using Assets.CodeBase.Character.States.Movement.Grounded.Landing;
 using Assets.CodeBase.Character.States.Movement.Grounded.Moving;
 using Assets.CodeBase.Character.States.Movement.Grounded.Stopping;
 using Assets.CodeBase.Infrastructure;
@@ -36,6 +37,10 @@ namespace Assets.CodeBase.Character.States.Movement
 
                 [typeof(JumpingState)] = new JumpingState(this),
                 [typeof(FallingState)] = new FallingState(this),
+
+                [typeof(LightLandingState)] = new LightLandingState(this),
+                [typeof(HardLandingState)] = new HardLandingState(this),
+                [typeof(RollingState)] = new RollingState(this),
             };
         }
     }

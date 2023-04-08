@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.Data.States.Airborne
@@ -11,7 +7,9 @@ namespace Assets.CodeBase.Character.Data.States.Airborne
     public class UnitFallData
     {
         [SerializeField, Range(1f,15f)] private float _fallSpeedLimit = 15f;
+        [SerializeField, Range(1f,100f)] private float _minimalDistanceToFall = 3f;
 
         public float FallSpeedLimit => _fallSpeedLimit;
+        public float MinimalDistanceAsHardFall => _minimalDistanceToFall;
     }
 }

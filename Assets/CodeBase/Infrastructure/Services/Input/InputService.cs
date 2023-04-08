@@ -7,7 +7,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
         public bool MoveInputTriggered => _moveInputTriggered;
         public Vector2 MoveInputValue => _controls.Character.Move.ReadValue<Vector2>();
 
-        public event IInputService.EventZeroParameters WalkToggleTriggered;
+        public event IInputService.EventZeroParameters WalkToggleStarted;
         public event IInputService.EventZeroParameters MovementStarted;
         public event IInputService.EventZeroParameters MovementPerformed;
         public event IInputService.EventZeroParameters MovementCancelled;
@@ -38,7 +38,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
 
             _controls.Character.Sprint.performed += _ =>SprintPerformed?.Invoke();
 
-            _controls.Character.WalkToggle.started += _ => WalkToggleTriggered?.Invoke();
+            _controls.Character.WalkToggle.started += _ => WalkToggleStarted?.Invoke();
         }
 
         public void Enable() => _controls.Enable();
@@ -47,6 +47,12 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
 
         public void DisableDashFor(float seconds) => 
             _timeByWhichDashDisabled = Time.time + seconds;
+
+        public void DisableMove() =>
+            _controls.Character.Move.Disable();
+
+        public void EnableMove() =>
+            _controls.Character.Move.Enable();
 
         private void HandleDashStarted() {
             if (Time.time > _timeByWhichDashDisabled)

@@ -1,4 +1,4 @@
-using Assets.CodeBase.Character.States.Movement.Grounded;
+using Assets.CodeBase.Character.States.Movement.Grounded.Landing;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Airborne
@@ -15,7 +15,7 @@ namespace Assets.CodeBase.Character.States.Movement.Airborne
         }
 
         protected override void OnContactWithGround(Collider collider) => 
-            _stateMachine.Enter<IdlingState>();
+            _stateMachine.Enter<LightLandingState>();
 
         protected virtual void ResetSprintState() => 
             _stateMachine.ReusableData.IsSprinting = false;

@@ -28,21 +28,16 @@ namespace Assets.CodeBase.Character.States.Movement
             AddInputActionsCallbacks();
         }
 
-        public virtual void Exit() {
+        public virtual void Exit() => 
             RemoveInputActionsCallbacks();
-        }
 
-        public virtual void HandleInput() {
+        public virtual void HandleInput() => 
             ReadMovementInput();
-        }
 
-        public virtual void Update() {
+        public virtual void Update() { }
 
-        }
-
-        public virtual void PhysicsUpdate() {
+        public virtual void PhysicsUpdate() => 
             Move();
-        }
 
         public virtual void OnAnimationEnterEvent() { }
 
@@ -60,7 +55,8 @@ namespace Assets.CodeBase.Character.States.Movement
                 OnLostContactWithGround(collider);
         }
 
-        private void InitializeData() => SetBaseRotationData();
+        private void InitializeData() => 
+            SetBaseRotationData();
 
         private void ReadMovementInput() =>
             _stateMachine.ReusableData.MovementInput = _stateMachine.Player.InputService.MoveInputValue;
@@ -199,7 +195,7 @@ namespace Assets.CodeBase.Character.States.Movement
         protected void ResetVelocity() =>
             _stateMachine.Player.Rigidbody.velocity = Vector3.zero;
 
-        protected void ResetVertivalVelocity() => 
+        protected void ResetVertivalVelocity() =>
             _stateMachine.Player.Rigidbody.velocity = GetPlayerHorizontalVelocity();
 
         protected virtual void OnContactWithGround(Collider collider) { }
@@ -207,10 +203,10 @@ namespace Assets.CodeBase.Character.States.Movement
         protected virtual void OnLostContactWithGround(Collider collider) { }
 
         protected virtual void AddInputActionsCallbacks() =>
-            _stateMachine.Player.InputService.WalkToggleTriggered += WalkToggle;
+            _stateMachine.Player.InputService.WalkToggleStarted += WalkToggle;
 
         protected virtual void RemoveInputActionsCallbacks() =>
-            _stateMachine.Player.InputService.WalkToggleTriggered -= WalkToggle;
+            _stateMachine.Player.InputService.WalkToggleStarted -= WalkToggle;
 
         protected virtual void WalkToggle() =>
             _stateMachine.ReusableData.IsWalking = !_stateMachine.ReusableData.IsWalking;

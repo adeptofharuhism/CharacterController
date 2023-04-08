@@ -8,7 +8,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
         bool MoveInputTriggered { get; }
 
         delegate void EventZeroParameters();
-        event EventZeroParameters WalkToggleTriggered;
+        event EventZeroParameters WalkToggleStarted;
         event EventZeroParameters MovementCancelled;
         event EventZeroParameters DashStarted;
         event EventZeroParameters SprintPerformed;
@@ -20,5 +20,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
         void DisableDashFor(float seconds);
         void Enable();
         void Initialize();
+        void DisableMove();
+        void EnableMove();
     }
 }

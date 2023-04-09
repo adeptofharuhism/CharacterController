@@ -10,6 +10,8 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Landing
         public override void Enter() {
             base.Enter();
 
+            StartAnimation(_stateMachine.Player.AnimationData.HardLandParameterHash);
+
             _stateMachine.Player.InputService.DisableMove();
             _stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
@@ -18,6 +20,8 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Landing
 
         public override void Exit() {
             base.Exit();
+
+            StopAnimation(_stateMachine.Player.AnimationData.HardLandParameterHash);
 
             _stateMachine.Player.InputService.Enable();
         }

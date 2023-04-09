@@ -1,4 +1,5 @@
-﻿using Assets.CodeBase.Character.Data.Colliders;
+﻿using Assets.CodeBase.Character.Animation;
+using Assets.CodeBase.Character.Data.Colliders;
 using Assets.CodeBase.Character.Data.Layers;
 using Assets.CodeBase.Character.Data.ScriptableObjects;
 using Assets.CodeBase.Character.States.Movement;
@@ -12,14 +13,17 @@ namespace Assets.CodeBase.Character.Player
 {
     public class Player : MonoBehaviour
     {
+        [Header("Movement Data")]
+        [SerializeField] private UnitScriptableObject _data;
+
+        [Header("Collisions")]
         [SerializeField] private Rigidbody _rigidbody;
-
-        [SerializeField, Header("Movement Data")]
-        private UnitScriptableObject _data;
-
-        [SerializeField, Header("Collisions")]
-        private UnitCapsuleColliderUtility _colliderUtility;
+        [SerializeField] private UnitCapsuleColliderUtility _colliderUtility;
         [SerializeField] private UnitLayerData _layerData;
+
+        [Header("Animations")]
+        [SerializeField] private UnitAnimationData _animationData;
+        [SerializeField] private Animator _animator;
 
         private IInputService _inputService;
         private MovementStateMachine _movementStateMachine;
@@ -31,6 +35,8 @@ namespace Assets.CodeBase.Character.Player
         public UnitScriptableObject Data => _data;
         public UnitCapsuleColliderUtility ColliderUtility => _colliderUtility;
         public UnitLayerData LayerData => _layerData;
+        public UnitAnimationData AnimationData => _animationData;
+        public Animator Animator => _animator;
 
         private void Awake() {
             _inputService = AllServices.Container.Single<IInputService>();
@@ -39,6 +45,8 @@ namespace Assets.CodeBase.Character.Player
 
             _colliderUtility.Initialize();
             _colliderUtility.CalculateCapsuleColliderDimensions();
+
+            _animationData.Initialize();
 
             _movementStateMachine = new MovementStateMachine(this);
         }
@@ -64,5 +72,11 @@ namespace Assets.CodeBase.Character.Player
             _colliderUtility.Initialize();
             _colliderUtility.CalculateCapsuleColliderDimensions();
         }
+
+        public void OnAnimationEnterEvent() => _movementStateMachine.OnAnimationEnterEvent();
+
+        public void OnAnimationExitEvent() => _movementStateMachine.OnAnimationExitEvent();
+
+        public void OnAnimationTransitEvent() => _movementStateMachine.OnAnimationTransitEvent();
     }
 }

@@ -18,11 +18,19 @@ namespace Assets.CodeBase.Character.States.Movement.Airborne
         public override void Enter() {
             base.Enter();
 
+            StartAnimation(_stateMachine.Player.AnimationData.FallParameterHash);
+
             _playerPositionOnEnter = _stateMachine.Player.transform.position;
 
             _stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
             ResetVertivalVelocity();
+        }
+
+        public override void Exit() {
+            base.Exit();
+
+            StopAnimation(_stateMachine.Player.AnimationData.FallParameterHash);
         }
 
         public override void PhysicsUpdate() {

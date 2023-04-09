@@ -1152,8 +1152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed975febc1278a143898d06fc773c262, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rigidbody: {fileID: 527066211}
   _data: {fileID: 11400000, guid: c84b333d00c51b74cae8c7d1f37a3827, type: 2}
+  _rigidbody: {fileID: 527066211}
   _colliderUtility:
     _capsuleColliderData:
       _collider: {fileID: 527066212}
@@ -1171,6 +1171,23 @@ MonoBehaviour:
     _groundLayer:
       serializedVersion: 2
       m_Bits: 64
+  _animationData:
+    _groundedParameterName: Grounded
+    _movingParameterName: Moving
+    _stoppingParameterName: Stopping
+    _landingParameterName: Landing
+    _airborneParameterName: Airborne
+    _idleParameterName: IsIdling
+    _dashParameterName: IsDashing
+    _walkParameterName: IsWalking
+    _runParameterName: IsRunning
+    _sprintParameterName: IsSprinting
+    _mediumStopParameterName: IsMediumStopping
+    _hardStopParameterName: IsHardStopping
+    _rollParameterName: IsRolling
+    _hardLandParameterName: IsHardLanding
+    _fallParameterName: IsFalling
+  _animator: {fileID: 4896212100020497287}
 --- !u!54 &527066211
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6001,6 +6018,8 @@ GameObject:
   - component: {fileID: 1336493866042028425}
   - component: {fileID: 4896212100020497286}
   - component: {fileID: 1245513025801350566}
+  - component: {fileID: 4896212100020497287}
+  - component: {fileID: 4896212100020497288}
   m_Layer: 0
   m_Name: Shiro
   m_TagString: Untagged
@@ -6389,6 +6408,39 @@ MonoBehaviour:
   m_RightLittleProximal: {fileID: 51123265005129959}
   m_RightLittleIntermediate: {fileID: 8074209223098858551}
   m_RightLittleDistal: {fileID: 8968215868634427045}
+--- !u!95 &4896212100020497287
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4400096801025987487}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: cd9b792bccb5d4649a9b0a6602747e12, type: 3}
+  m_Controller: {fileID: 9100000, guid: ee5c9276c074ad24a96bcb1a58d1250a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4896212100020497288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4400096801025987487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c972ec0503dcae04e856fde5250710a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 527066210}
 --- !u!4 &4924621014288015353
 Transform:
   m_ObjectHideFlags: 0

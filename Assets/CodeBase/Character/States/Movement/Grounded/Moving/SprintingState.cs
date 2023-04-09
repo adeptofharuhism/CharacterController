@@ -19,6 +19,8 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
         public override void Enter() {
             base.Enter();
 
+            StartAnimation(_stateMachine.Player.AnimationData.SprintParameterHash);
+
             _stateMachine.ReusableData.MovementSpeedModifier = _sprintData.SpeedModifier;
             _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.StrongForce;
 
@@ -29,6 +31,8 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
 
         public override void Exit() {
             base.Exit();
+
+            StopAnimation(_stateMachine.Player.AnimationData.SprintParameterHash);
 
             if (_shouldResetSprintingState) {
                 _stateMachine.ReusableData.IsSprinting = false;

@@ -20,9 +20,17 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Landing
         public override void Enter() {
             base.Enter();
 
+            StartAnimation(_stateMachine.Player.AnimationData.RollParameterHash);
+
             _stateMachine.ReusableData.MovementSpeedModifier = _rollData.SpeedModifier;
 
             _stateMachine.ReusableData.IsSprinting = false;
+        }
+
+        public override void Exit() {
+            base.Exit();
+
+            StopAnimation(_stateMachine.Player.AnimationData.RollParameterHash);
         }
 
         public override void PhysicsUpdate() {

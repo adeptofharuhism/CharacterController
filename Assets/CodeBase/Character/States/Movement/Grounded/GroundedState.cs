@@ -1,7 +1,6 @@
 ﻿using Assets.CodeBase.Character.States.Movement.Airborne;
 using Assets.CodeBase.Character.States.Movement.Grounded.Moving;
 using Assets.CodeBase.Utility.Colliders;
-using System;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded
@@ -17,7 +16,15 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
         public override void Enter() {
             base.Enter();
 
+            StartAnimation(_stateMachine.Player.AnimationData.GroundedParameterHash);
+
             UpdateIsSprintingFlag();
+        }
+
+        public override void Exit() {
+            base.Exit();
+
+            StopAnimation(_stateMachine.Player.AnimationData.GroundedParameterHash);
         }
 
         public override void PhysicsUpdate() {

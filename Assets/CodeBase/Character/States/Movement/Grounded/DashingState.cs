@@ -22,6 +22,8 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
         public override void Enter() {
             base.Enter();
 
+            StartAnimation(_stateMachine.Player.AnimationData.DashParameterHash);
+
             _stateMachine.ReusableData.MovementSpeedModifier = _dashData.SpeedModifier;
             _stateMachine.ReusableData.RotationData = _dashData.RotationData;
             _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.StrongForce;
@@ -34,6 +36,14 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
             _startTime = Time.time;
         }
 
+        public override void Exit() {
+            base.Exit();
+
+            StopAnimation(_stateMachine.Player.AnimationData.DashParameterHash);
+
+            SetBaseRotationData();
+        }
+
         public override void PhysicsUpdate() {
             base.PhysicsUpdate();
 
@@ -41,12 +51,6 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
                 return;
 
             RotateTowardsTargetRotation();
-        }
-
-        public override void Exit() {
-            base.Exit();
-
-            SetBaseRotationData();
         }
 
         protected override void AddInputActionsCallbacks() {

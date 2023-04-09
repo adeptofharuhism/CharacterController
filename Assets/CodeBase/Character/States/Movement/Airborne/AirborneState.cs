@@ -11,7 +11,15 @@ namespace Assets.CodeBase.Character.States.Movement.Airborne
         public override void Enter() {
             base.Enter();
 
+            StartAnimation(_stateMachine.Player.AnimationData.AirborneParameterHash);
+
             ResetSprintState();
+        }
+
+        public override void Exit() {
+            base.Exit();
+
+            StopAnimation(_stateMachine.Player.AnimationData.AirborneParameterHash);
         }
 
         protected override void OnContactWithGround(Collider collider) => 

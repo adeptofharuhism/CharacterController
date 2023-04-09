@@ -7,5 +7,17 @@
 
         protected override void OnMovementCancelled() {
         }
+
+        public override void Enter() {
+            base.Enter();
+
+            StartAnimation(_stateMachine.Player.AnimationData.LandingParameterHash);
+        }
+
+        public override void Exit() {
+            base.Exit();
+
+            StopAnimation(_stateMachine.Player.AnimationData.LandingParameterHash);
+        }
     }
 }

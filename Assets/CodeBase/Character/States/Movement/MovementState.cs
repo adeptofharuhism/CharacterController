@@ -6,8 +6,7 @@ using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement
 {
-    public class MovementState : IUnitState
-    {
+    public class MovementState : IUnitState {
         protected readonly MovementStateMachine _stateMachine;
 
         protected UnitGroundedData _groundedData;
@@ -185,7 +184,7 @@ namespace Assets.CodeBase.Character.States.Movement
 
         protected Vector3 GetPlayerVerticalVelocity() =>
             new Vector3(0f, _stateMachine.Player.Rigidbody.velocity.y, 0f);
-        
+
         protected float GetMovementSpeed(bool considerSlopes = true) =>
             considerSlopes
             ? _groundedData.BaseSpeed * _stateMachine.ReusableData.MovementOnSlopesSpeedModifier * _stateMachine.ReusableData.MovementSpeedModifier
@@ -199,6 +198,12 @@ namespace Assets.CodeBase.Character.States.Movement
 
         protected void ResetVertivalVelocity() =>
             _stateMachine.Player.Rigidbody.velocity = GetPlayerHorizontalVelocity();
+
+        protected void StartAnimation(int animationHash) =>
+            _stateMachine.Player.Animator.SetBool(animationHash, true);
+
+        protected void StopAnimation(int animationHash) =>
+            _stateMachine.Player.Animator.SetBool(animationHash, false);
 
         protected virtual void OnContactWithGround(Collider collider) { }
 

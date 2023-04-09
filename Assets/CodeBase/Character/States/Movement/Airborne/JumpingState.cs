@@ -60,6 +60,7 @@ namespace Assets.CodeBase.Character.States.Movement.Airborne
             Vector3 jumpDirection = _stateMachine.Player.transform.forward;
 
             if (_shouldKeepRotating) {
+                UpdateTargetRotation(GetMovementDirection());
                 jumpDirection = GetTargetRotationDirection(_stateMachine.ReusableData.CurrentTargetRotation.y);
             }
 

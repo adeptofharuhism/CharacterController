@@ -32,7 +32,7 @@ namespace Assets.CodeBase.Character.States.Movement.Airborne
         }
 
         protected override void OnContactWithGround(Collider collider) {
-            float fallDistance = Mathf.Abs(_playerPositionOnEnter.y - _stateMachine.Player.transform.position.y);
+            float fallDistance = _playerPositionOnEnter.y - _stateMachine.Player.transform.position.y;
 
             if (fallDistance < _fallData.MinimalDistanceAsHardFall) {
                 _stateMachine.Enter<LightLandingState>();

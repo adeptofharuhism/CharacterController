@@ -28,15 +28,15 @@ namespace Assets.CodeBase.Character.States.Movement
             AddInputActionsCallbacks();
         }
 
-        public virtual void Exit() => 
+        public virtual void Exit() =>
             RemoveInputActionsCallbacks();
 
-        public virtual void HandleInput() => 
+        public virtual void HandleInput() =>
             ReadMovementInput();
 
         public virtual void Update() { }
 
-        public virtual void PhysicsUpdate() => 
+        public virtual void PhysicsUpdate() =>
             Move();
 
         public virtual void OnAnimationEnterEvent() { }
@@ -55,7 +55,7 @@ namespace Assets.CodeBase.Character.States.Movement
                 OnLostContactWithGround(collider);
         }
 
-        private void InitializeData() => 
+        private void InitializeData() =>
             SetBaseRotationData();
 
         private void ReadMovementInput() =>
@@ -185,9 +185,11 @@ namespace Assets.CodeBase.Character.States.Movement
 
         protected Vector3 GetPlayerVerticalVelocity() =>
             new Vector3(0f, _stateMachine.Player.Rigidbody.velocity.y, 0f);
-
-        protected float GetMovementSpeed() =>
-            _groundedData.BaseSpeed * _stateMachine.ReusableData.MovementOnSlopesSpeedModifier * _stateMachine.ReusableData.MovementSpeedModifier;
+        
+        protected float GetMovementSpeed(bool considerSlopes = true) =>
+            considerSlopes
+            ? _groundedData.BaseSpeed * _stateMachine.ReusableData.MovementOnSlopesSpeedModifier * _stateMachine.ReusableData.MovementSpeedModifier
+            : _groundedData.BaseSpeed * _stateMachine.ReusableData.MovementSpeedModifier;
 
         protected Vector3 GetMovementDirection() =>
             new Vector3(_stateMachine.ReusableData.MovementInput.x, 0f, _stateMachine.ReusableData.MovementInput.y);

@@ -26,7 +26,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
             _stateMachine.ReusableData.RotationData = _dashData.RotationData;
             _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.StrongForce;
 
-            AddForceOnTransitionFromIdleState();
+            Dash();
             UpdateConsecutiveDashes();
 
             _shouldKeepRotating = _stateMachine.ReusableData.MovementInput != Vector2.zero;
@@ -74,17 +74,19 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
         protected override void OnMovementCancelled() { }
         protected override void OnDashStarted() { }
 
-        private void AddForceOnTransitionFromIdleState() {
-            if (_stateMachine.ReusableData.MovementInput != Vector2.zero)
-                return;
+        private void Dash() {
+            Vector3 dashDirection = _stateMachine.Player.transform.forward;
 
-            Vector3 characterRotationDirection = _stateMachine.Player.transform.forward;
+            dashDirection.y = 0f;
 
-            characterRotationDirection.y = 0f;
+            UpdateTargetRotation(dashDirection, false);
 
-            UpdateTargetRotation(characterRotationDirection, false);
+            if (_stateMachine.ReusableData.MovementInput != Vector2.zero) {
+                UpdateTargetRotation(GetMovementDirection());
+                dashDirection = GetTargetRotationDirection(_stateMachine.ReusableData.CurrentTargetRotation.y);
+            }
 
-            _stateMachine.Player.Rigidbody.velocity = characterRotationDirection * GetMovementSpeed();
+            _stateMachine.Player.Rigidbody.velocity = dashDirection * GetMovementSpeed(false);
         }
 
         private void UpdateConsecutiveDashes() {

@@ -10,5 +10,9 @@ namespace Assets.CodeBase.Character.Data.Colliders
         [SerializeField] private UnitTriggerColliderData _triggerColliderData;
 
         public UnitTriggerColliderData TriggerColliderData => _triggerColliderData;
+
+        protected override void OnInitialize() {
+            _triggerColliderData.Initialize();
+        }
     }
 }

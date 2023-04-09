@@ -25,5 +25,14 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
 
             OnMove();
         }
+
+        public override void PhysicsUpdate() {
+            base.PhysicsUpdate();
+
+            if (!IsMovingHorizontally())
+                return;
+
+            ResetVelocity();
+        }
     }
 }

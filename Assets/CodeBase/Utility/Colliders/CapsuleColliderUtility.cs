@@ -15,8 +15,8 @@ namespace Assets.CodeBase.Utility.Colliders
         public SlopeData SlopeData => _slopeData;
 
         public void Initialize() {
-
             _capsuleColliderData.Initialize();
+            OnInitialize();
         }
 
         public void CalculateCapsuleColliderDimensions() {
@@ -28,6 +28,8 @@ namespace Assets.CodeBase.Utility.Colliders
 
             RecalculateSmallHeightCenter();
         }
+
+        protected virtual void OnInitialize() { }
 
         private void SetCapsuleColliderRadius(float radius) =>
             _capsuleColliderData.Collider.radius = radius;

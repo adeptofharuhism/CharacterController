@@ -74,7 +74,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
             Collider[] overlappedGroundCollider =
                 Physics.OverlapBox(
                     groundColliderCenterInWorldspace,
-                    groundCheckCollider.bounds.extents,
+                    _stateMachine.Player.ColliderUtility.TriggerColliderData.GroundCheckColliderExtents,
                     groundCheckCollider.transform.rotation,
                     _stateMachine.Player.LayerData.GroundLayer,
                     QueryTriggerInteraction.Ignore);

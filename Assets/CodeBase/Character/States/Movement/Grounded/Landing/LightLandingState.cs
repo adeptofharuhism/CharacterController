@@ -25,6 +25,15 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Landing
             OnMove();
         }
 
+        public override void PhysicsUpdate() {
+            base.PhysicsUpdate();
+
+            if (!IsMovingHorizontally())
+                return;
+
+            ResetVelocity();
+        }
+
         public override void OnAnimationTransitEvent() => 
             _stateMachine.Enter<IdlingState>();
     }

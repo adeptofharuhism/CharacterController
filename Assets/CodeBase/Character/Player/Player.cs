@@ -6,7 +6,6 @@ using Assets.CodeBase.Character.States.Movement;
 using Assets.CodeBase.Character.States.Movement.Grounded;
 using Assets.CodeBase.Infrastructure.Services;
 using Assets.CodeBase.Infrastructure.Services.Input;
-using Assets.CodeBase.Utility.Colliders;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.Player
@@ -22,8 +21,8 @@ namespace Assets.CodeBase.Character.Player
         [SerializeField] private UnitLayerData _layerData;
 
         [Header("Animations")]
-        [SerializeField] private UnitAnimationData _animationData;
         [SerializeField] private Animator _animator;
+        [SerializeField] private UnitAnimationData _animationData;
 
         private IInputService _inputService;
         private MovementStateMachine _movementStateMachine;

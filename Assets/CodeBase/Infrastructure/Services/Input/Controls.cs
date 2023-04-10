@@ -46,24 +46,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Look"",
-                    ""type"": ""Value"",
-                    ""id"": ""8010e46b-408e-454a-bc8f-aea4e0a85c18"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Zoom"",
-                    ""type"": ""Value"",
-                    ""id"": ""f21b171a-ffc1-4929-ab08-53db08e4f799"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""Dash"",
                     ""type"": ""Button"",
                     ""id"": ""78eececd-4b49-46c4-80e0-27e1e043ccac"",
@@ -160,28 +142,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""6789ca68-adfc-478f-bbd1-58cc04c5fd41"",
-                    ""path"": ""<Mouse>/delta"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4efe023f-a677-4d3b-8e28-044f32167626"",
-                    ""path"": ""<Mouse>/scroll/y"",
-                    ""interactions"": """",
-                    ""processors"": ""Clamp(min=-0.1,max=0.1),Invert"",
-                    ""groups"": """",
-                    ""action"": ""Zoom"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""da094fce-309a-4771-93d6-a843d071c45a"",
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
@@ -256,8 +216,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         m_Character = asset.FindActionMap("Character", throwIfNotFound: true);
         m_Character_Move = m_Character.FindAction("Move", throwIfNotFound: true);
         m_Character_WalkToggle = m_Character.FindAction("WalkToggle", throwIfNotFound: true);
-        m_Character_Look = m_Character.FindAction("Look", throwIfNotFound: true);
-        m_Character_Zoom = m_Character.FindAction("Zoom", throwIfNotFound: true);
         m_Character_Dash = m_Character.FindAction("Dash", throwIfNotFound: true);
         m_Character_Sprint = m_Character.FindAction("Sprint", throwIfNotFound: true);
         m_Character_Jump = m_Character.FindAction("Jump", throwIfNotFound: true);
@@ -322,8 +280,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     private ICharacterActions m_CharacterActionsCallbackInterface;
     private readonly InputAction m_Character_Move;
     private readonly InputAction m_Character_WalkToggle;
-    private readonly InputAction m_Character_Look;
-    private readonly InputAction m_Character_Zoom;
     private readonly InputAction m_Character_Dash;
     private readonly InputAction m_Character_Sprint;
     private readonly InputAction m_Character_Jump;
@@ -333,8 +289,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         public CharacterActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Character_Move;
         public InputAction @WalkToggle => m_Wrapper.m_Character_WalkToggle;
-        public InputAction @Look => m_Wrapper.m_Character_Look;
-        public InputAction @Zoom => m_Wrapper.m_Character_Zoom;
         public InputAction @Dash => m_Wrapper.m_Character_Dash;
         public InputAction @Sprint => m_Wrapper.m_Character_Sprint;
         public InputAction @Jump => m_Wrapper.m_Character_Jump;
@@ -353,12 +307,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @WalkToggle.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnWalkToggle;
                 @WalkToggle.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnWalkToggle;
                 @WalkToggle.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnWalkToggle;
-                @Look.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnLook;
-                @Look.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnLook;
-                @Look.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnLook;
-                @Zoom.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnZoom;
-                @Zoom.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnZoom;
-                @Zoom.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnZoom;
                 @Dash.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnDash;
@@ -378,12 +326,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @WalkToggle.started += instance.OnWalkToggle;
                 @WalkToggle.performed += instance.OnWalkToggle;
                 @WalkToggle.canceled += instance.OnWalkToggle;
-                @Look.started += instance.OnLook;
-                @Look.performed += instance.OnLook;
-                @Look.canceled += instance.OnLook;
-                @Zoom.started += instance.OnZoom;
-                @Zoom.performed += instance.OnZoom;
-                @Zoom.canceled += instance.OnZoom;
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
@@ -410,8 +352,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnWalkToggle(InputAction.CallbackContext context);
-        void OnLook(InputAction.CallbackContext context);
-        void OnZoom(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);

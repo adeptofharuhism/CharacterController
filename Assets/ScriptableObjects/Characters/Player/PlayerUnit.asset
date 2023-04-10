@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: PlayerUnit
   m_EditorClassIdentifier: 
   _groundedData:
-    _baseSpeed: 5
+    _baseSpeed: 3
+    _groundToFallRayDistance: 1
     _baseRotationData:
       _targetRotationReachTime: {x: 0, y: 0.14, z: 0}
     _walkData:
@@ -86,6 +87,8 @@ MonoBehaviour:
       _lightDecelerationForce: 5
       _mediumDecelerationForce: 6.5
       _hardDecelerationForce: 5
+    _rollData:
+      _speedModifier: 1
   _airborneData:
     _jumpData:
       _stationaryForce: {x: 0, y: 5, z: 0}
@@ -189,3 +192,6 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+    _fallData:
+      _fallSpeedLimit: 15
+      _minimalDistanceToFall: 3

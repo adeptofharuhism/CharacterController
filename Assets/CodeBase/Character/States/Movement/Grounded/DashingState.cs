@@ -83,7 +83,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
 
             dashDirection.y = 0f;
 
-            UpdateTargetRotation(dashDirection, false);
+            UpdateTargetRotation(dashDirection);
 
             if (_stateMachine.ReusableData.MovementInput != Vector2.zero) {
                 UpdateTargetRotation(GetMovementDirection());

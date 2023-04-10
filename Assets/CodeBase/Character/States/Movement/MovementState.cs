@@ -87,23 +87,14 @@ namespace Assets.CodeBase.Character.States.Movement
 
         private void UpdateTargetRotationData(float targetAngle) {
             _stateMachine.ReusableData.CurrentTargetRotation.y = targetAngle;
-
             _stateMachine.ReusableData.DampedTargetRotationPassedTime.y = 0f;
         }
 
         private static float GetDirectionAngle(Vector3 direction) {
             float directionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-
             if (directionAngle < 0f)
                 directionAngle += 360f;
-            return directionAngle;
-        }
 
-        private float AddCameraRotationToAngle(float directionAngle) {
-            directionAngle += _stateMachine.Player.MainCameraTransform.eulerAngles.y;
-
-            if (directionAngle >= 360f)
-                directionAngle -= 360f;
             return directionAngle;
         }
 
@@ -112,11 +103,8 @@ namespace Assets.CodeBase.Character.States.Movement
             _stateMachine.ReusableData.TimeToReachTargetRotation = _groundedData.BaseRotationData.TargetRotationReachTime;
         }
 
-        protected float UpdateTargetRotation(Vector3 direction, bool shouldConsiderCameraRotation = true) {
+        protected float UpdateTargetRotation(Vector3 direction) {
             float directionAngle = GetDirectionAngle(direction);
-
-            if (shouldConsiderCameraRotation)
-                directionAngle = AddCameraRotationToAngle(directionAngle);
 
             if (directionAngle != _stateMachine.ReusableData.CurrentTargetRotation.y)
                 UpdateTargetRotationData(directionAngle);
@@ -128,7 +116,7 @@ namespace Assets.CodeBase.Character.States.Movement
             Quaternion.Euler(0f, targetYAngle, 0f) * Vector3.forward;
 
         protected void RotateTowardsTargetRotation() {
-            float currentYAngle = _stateMachine.Player.Rigidbody.rotation.y;
+            float currentYAngle = _stateMachine.Player.Rigidbody.rotation.eulerAngles.y;
 
             if (currentYAngle == _stateMachine.ReusableData.CurrentTargetRotation.y)
                 return;

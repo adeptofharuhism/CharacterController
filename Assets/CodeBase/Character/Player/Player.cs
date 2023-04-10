@@ -31,7 +31,7 @@ namespace Assets.CodeBase.Character.Player
 
         public IInputService InputService => _inputService;
         public Rigidbody Rigidbody => _rigidbody;
-        public Transform MainCameraTransform => _mainCameraTransform;
+        //public Transform MainCameraTransform => _mainCameraTransform;
         public UnitScriptableObject Data => _data;
         public UnitCapsuleColliderUtility ColliderUtility => _colliderUtility;
         public UnitLayerData LayerData => _layerData;

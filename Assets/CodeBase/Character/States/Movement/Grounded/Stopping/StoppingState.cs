@@ -1,7 +1,11 @@
-﻿namespace Assets.CodeBase.Character.States.Movement.Grounded.Stopping
+﻿using UnityEngine;
+
+namespace Assets.CodeBase.Character.States.Movement.Grounded.Stopping
 {
     public class StoppingState : GroundedState
     {
+        private float _exitTime;
+
         public StoppingState(MovementStateMachine stateMachine) : base(stateMachine) {
         }
 
@@ -11,12 +15,20 @@
             StartAnimation(_stateMachine.Player.AnimationData.StoppingParameterHash);
 
             _stateMachine.ReusableData.MovementSpeedModifier = 0f;
+
+            _exitTime = Time.time + _groundedData.StopData.ForceStopStateExitTime;
         }
 
         public override void Exit() {
             base.Exit();
 
             StopAnimation(_stateMachine.Player.AnimationData.StoppingParameterHash);
+        }
+
+        public override void Update() {
+            base.Update();
+
+            ExitByTime();
         }
 
         public override void PhysicsUpdate() {
@@ -42,12 +54,15 @@
             _stateMachine.Player.InputService.MovementStarted -= OnMovementStarted;
         }
 
-        private void OnMovementStarted() {
-            OnMove();
+        public override void OnAnimationTransitEvent() => _stateMachine.Enter<IdlingState>();
+
+        protected virtual void ExitByTime() {
+            if (_exitTime < Time.time) {
+                Debug.Log("By time");
+                _stateMachine.Enter<IdlingState>();
+            }
         }
 
-        public override void OnAnimationTransitEvent() {
-            _stateMachine.Enter<IdlingState>();
-        }
+        private void OnMovementStarted() => OnMove();
     }
 }

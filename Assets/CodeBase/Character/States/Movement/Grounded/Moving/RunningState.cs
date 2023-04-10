@@ -13,10 +13,18 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
         public override void Enter() {
             base.Enter();
 
+            StartAnimation(_stateMachine.Player.AnimationData.RunParameterHash);
+
             _stateMachine.ReusableData.MovementSpeedModifier = _groundedData.RunData.SpeedModifier;
             _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.MediumForce;
 
             _startTime = Time.time;
+        }
+
+        public override void Exit() {
+            base.Exit();
+
+            StopAnimation(_stateMachine.Player.AnimationData.RunParameterHash);
         }
 
         public override void Update() {

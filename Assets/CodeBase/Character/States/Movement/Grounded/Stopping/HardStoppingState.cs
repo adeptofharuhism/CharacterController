@@ -29,5 +29,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Stopping
 
             _stateMachine.Enter<RunningState>();
         }
+
+        protected override void ExitByTime() { }
     }
 }

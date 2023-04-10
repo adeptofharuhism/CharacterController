@@ -32,6 +32,9 @@ namespace Assets.CodeBase.Character.Animation
             _player.OnAnimationTransitEvent();
         }
 
+        public void TriggerOnAnimationTransitForce() => 
+            _player.OnAnimationTransitEvent();
+
         private bool IsInAnimationTransition(int layerIndex = 0) {
             return _player.Animator.IsInTransition(layerIndex);
         }

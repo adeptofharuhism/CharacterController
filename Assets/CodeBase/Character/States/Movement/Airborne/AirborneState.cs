@@ -5,13 +5,13 @@ namespace Assets.CodeBase.Character.States.Movement.Airborne
 {
     public class AirborneState : MovementState
     {
-        public AirborneState(MovementStateMachine stateMachine) : base(stateMachine) {
+        public AirborneState(MovementStateConstructionData constructionData) : base(constructionData) {
         }
 
         public override void Enter() {
             base.Enter();
 
-            StartAnimation(_stateMachine.Player.AnimationData.AirborneParameterHash);
+            StartAnimation(_animationData.AirborneParameterHash);
 
             ResetSprintState();
         }
@@ -19,13 +19,13 @@ namespace Assets.CodeBase.Character.States.Movement.Airborne
         public override void Exit() {
             base.Exit();
 
-            StopAnimation(_stateMachine.Player.AnimationData.AirborneParameterHash);
+            StopAnimation(_animationData.AirborneParameterHash);
         }
 
         protected override void OnContactWithGround(Collider collider) => 
             _stateMachine.Enter<LightLandingState>();
 
         protected virtual void ResetSprintState() => 
-            _stateMachine.ReusableData.IsSprinting = false;
+            _reusableData.IsSprinting = false;
     }
 }

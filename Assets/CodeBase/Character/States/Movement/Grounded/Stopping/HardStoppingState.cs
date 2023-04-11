@@ -1,30 +1,33 @@
 ﻿using Assets.CodeBase.Character.States.Movement.Grounded.Moving;
+using Assets.CodeBase.Utility.Colliders;
+using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded.Stopping
 {
     public class HardStoppingState : StoppingState
     {
-        public HardStoppingState(MovementStateMachine stateMachine) : base(stateMachine) {
+        public HardStoppingState(MovementStateConstructionData constructionData, Transform unitTransform) :
+            base(constructionData, unitTransform) {
         }
 
         public override void Enter() {
             base.Enter();
 
-            StartAnimation(_stateMachine.Player.AnimationData.HardStopParameterHash);
+            StartAnimation(_animationData.HardStopParameterHash);
 
-            _stateMachine.ReusableData.MovementDecelerationForce =
-                _stateMachine.Player.Data.GroundedData.StopData.HardDecelerationForce;
-            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.StrongForce;
+            _reusableData.MovementDecelerationForce =
+                _groundedData.StopData.HardDecelerationForce;
+            _reusableData.CurrentJumpForce = _airborneData.JumpData.StrongForce;
         }
 
         public override void Exit() {
             base.Exit();
 
-            StopAnimation(_stateMachine.Player.AnimationData.HardStopParameterHash);
+            StopAnimation(_animationData.HardStopParameterHash);
         }
 
         protected override void OnMove() {
-            if (_stateMachine.ReusableData.IsWalking)
+            if (_reusableData.IsWalking)
                 return;
 
             _stateMachine.Enter<RunningState>();

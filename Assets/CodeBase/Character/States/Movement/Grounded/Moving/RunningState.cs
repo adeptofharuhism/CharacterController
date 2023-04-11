@@ -1,4 +1,5 @@
 ﻿using Assets.CodeBase.Character.States.Movement.Grounded.Stopping;
+using Assets.CodeBase.Utility.Colliders;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
@@ -7,16 +8,17 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
     {
         private float _startTime;
 
-        public RunningState(MovementStateMachine stateMachine) : base(stateMachine) {
+        public RunningState(MovementStateConstructionData constructionData, Transform unitTransform) : 
+            base(constructionData, unitTransform) {
         }
 
         public override void Enter() {
             base.Enter();
 
-            StartAnimation(_stateMachine.Player.AnimationData.RunParameterHash);
+            StartAnimation(_animationData.RunParameterHash);
 
-            _stateMachine.ReusableData.MovementSpeedModifier = _groundedData.RunData.SpeedModifier;
-            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.MediumForce;
+            _reusableData.MovementSpeedModifier = _groundedData.RunData.SpeedModifier;
+            _reusableData.CurrentJumpForce = _airborneData.JumpData.MediumForce;
 
             _startTime = Time.time;
         }
@@ -24,13 +26,13 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
         public override void Exit() {
             base.Exit();
 
-            StopAnimation(_stateMachine.Player.AnimationData.RunParameterHash);
+            StopAnimation(_animationData.RunParameterHash);
         }
 
         public override void Update() {
             base.Update();
 
-            if (!_stateMachine.ReusableData.IsWalking)
+            if (!_reusableData.IsWalking)
                 return;
 
             if (Time.time > _startTime + _groundedData.RunData.SpeedModifier)
@@ -38,7 +40,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
         }
 
         private void StopRunning() {
-            if (_stateMachine.ReusableData.MovementInput == Vector2.zero)
+            if (_reusableData.MovementInput == Vector2.zero)
                 _stateMachine.Enter<IdlingState>();
             else _stateMachine.Enter<WalkingState>();
         }

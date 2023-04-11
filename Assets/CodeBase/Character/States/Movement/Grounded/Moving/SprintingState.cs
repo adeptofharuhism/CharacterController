@@ -12,17 +12,19 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
         private bool _shouldResetSprintingState = false;
         private float _startTime;
 
-        public SprintingState(MovementStateMachine stateMachine) : base(stateMachine) {
-            _sprintData = _stateMachine.Player.Data.GroundedData.SprintData;
+        public SprintingState(MovementStateConstructionData constructionData, Transform unitTransform) : 
+            base(constructionData, unitTransform) {
+
+            _sprintData = _groundedData.SprintData;
         }
 
         public override void Enter() {
             base.Enter();
 
-            StartAnimation(_stateMachine.Player.AnimationData.SprintParameterHash);
+            StartAnimation(_animationData.SprintParameterHash);
 
-            _stateMachine.ReusableData.MovementSpeedModifier = _sprintData.SpeedModifier;
-            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.StrongForce;
+            _reusableData.MovementSpeedModifier = _sprintData.SpeedModifier;
+            _reusableData.CurrentJumpForce = _airborneData.JumpData.StrongForce;
 
             _shouldResetSprintingState = true;
 
@@ -32,10 +34,10 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
         public override void Exit() {
             base.Exit();
 
-            StopAnimation(_stateMachine.Player.AnimationData.SprintParameterHash);
+            StopAnimation(_animationData.SprintParameterHash);
 
             if (_shouldResetSprintingState) {
-                _stateMachine.ReusableData.IsSprinting = false;
+                _reusableData.IsSprinting = false;
                 _keepSprinting = false;
             }
         }
@@ -51,7 +53,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
         }
 
         private void StopSprinting() {
-            if (_stateMachine.ReusableData.MovementInput == Vector2.zero)
+            if (_reusableData.MovementInput == Vector2.zero)
                 _stateMachine.Enter<IdlingState>();
             else _stateMachine.Enter<RunningState>();
         }
@@ -59,19 +61,18 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
         protected override void AddInputActionsCallbacks() {
             base.AddInputActionsCallbacks();
 
-            _stateMachine.Player.InputService.SprintPerformed += OnSprintPerformed;
+            _inputService.SprintPerformed += OnSprintPerformed;
         }
 
         protected override void RemoveInputActionsCallbacks() {
             base.RemoveInputActionsCallbacks();
 
-            _stateMachine.Player.InputService.SprintPerformed -= OnSprintPerformed;
+            _inputService.SprintPerformed -= OnSprintPerformed;
         }
 
         private void OnSprintPerformed() {
             _keepSprinting = true;
-
-            _stateMachine.ReusableData.IsSprinting = true;
+            _reusableData.IsSprinting = true;
         }
 
         protected override void OnJumpStarted() {

@@ -1136,7 +1136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed975febc1278a143898d06fc773c262, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data: {fileID: 11400000, guid: c84b333d00c51b74cae8c7d1f37a3827, type: 2}
+  _movementData: {fileID: 11400000, guid: c84b333d00c51b74cae8c7d1f37a3827, type: 2}
   _rigidbody: {fileID: 527066211}
   _colliderUtility:
     _capsuleColliderData:
@@ -1155,6 +1155,7 @@ MonoBehaviour:
     _groundLayer:
       serializedVersion: 2
       m_Bits: 64
+  _animator: {fileID: 4896212100020497287}
   _animationData:
     _groundedParameterName: Grounded
     _movingParameterName: Moving
@@ -1171,7 +1172,6 @@ MonoBehaviour:
     _rollParameterName: IsRolling
     _hardLandParameterName: IsHardLanding
     _fallParameterName: IsFalling
-  _animator: {fileID: 4896212100020497287}
 --- !u!54 &527066211
 Rigidbody:
   m_ObjectHideFlags: 0

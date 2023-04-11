@@ -1,17 +1,21 @@
-﻿namespace Assets.CodeBase.Character.States.Movement.Grounded.Stopping
+﻿using Assets.CodeBase.Utility.Colliders;
+using UnityEngine;
+
+namespace Assets.CodeBase.Character.States.Movement.Grounded.Stopping
 {
     public class LightStoppingState : StoppingState
     {
-        public LightStoppingState(MovementStateMachine stateMachine) : base(stateMachine) {
+        public LightStoppingState(MovementStateConstructionData constructionData, Transform unitTransform) : 
+            base(constructionData, unitTransform) {
         }
 
         public override void Enter() {
             base.Enter();
 
-            _stateMachine.ReusableData.MovementDecelerationForce =
-                _stateMachine.Player.Data.GroundedData.StopData.LightDecelerationForce;
+            _reusableData.MovementDecelerationForce =
+                _groundedData.StopData.LightDecelerationForce;
 
-            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.WeakForce;
+            _reusableData.CurrentJumpForce = _airborneData.JumpData.WeakForce;
         }
     }
 }

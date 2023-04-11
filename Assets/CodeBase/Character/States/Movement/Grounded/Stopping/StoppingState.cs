@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.CodeBase.Utility.Colliders;
+using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded.Stopping
 {
@@ -6,15 +7,16 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Stopping
     {
         private float _exitTime;
 
-        public StoppingState(MovementStateMachine stateMachine) : base(stateMachine) {
+        public StoppingState(MovementStateConstructionData constructionData, Transform unitTransform) :
+            base(constructionData, unitTransform) {
         }
 
         public override void Enter() {
             base.Enter();
 
-            StartAnimation(_stateMachine.Player.AnimationData.StoppingParameterHash);
+            StartAnimation(_animationData.StoppingParameterHash);
 
-            _stateMachine.ReusableData.MovementSpeedModifier = 0f;
+            _reusableData.MovementSpeedModifier = 0f;
 
             _exitTime = Time.time + _groundedData.StopData.ForceStopStateExitTime;
         }
@@ -22,7 +24,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Stopping
         public override void Exit() {
             base.Exit();
 
-            StopAnimation(_stateMachine.Player.AnimationData.StoppingParameterHash);
+            StopAnimation(_animationData.StoppingParameterHash);
         }
 
         public override void Update() {
@@ -45,22 +47,20 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Stopping
         protected override void AddInputActionsCallbacks() {
             base.AddInputActionsCallbacks();
 
-            _stateMachine.Player.InputService.MovementStarted += OnMovementStarted;
+            _inputService.MovementStarted += OnMovementStarted;
         }
 
         protected override void RemoveInputActionsCallbacks() {
             base.RemoveInputActionsCallbacks();
 
-            _stateMachine.Player.InputService.MovementStarted -= OnMovementStarted;
+            _inputService.MovementStarted -= OnMovementStarted;
         }
 
         public override void OnAnimationTransitEvent() => _stateMachine.Enter<IdlingState>();
 
         protected virtual void ExitByTime() {
-            if (_exitTime < Time.time) {
-                Debug.Log("By time");
+            if (_exitTime < Time.time)
                 _stateMachine.Enter<IdlingState>();
-            }
         }
 
         private void OnMovementStarted() => OnMove();

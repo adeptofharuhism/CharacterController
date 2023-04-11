@@ -4,14 +4,15 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Landing
 {
     public class LightLandingState : LandingState
     {
-        public LightLandingState(MovementStateMachine stateMachine) : base(stateMachine) {
+        public LightLandingState(MovementStateConstructionData constructionData, Transform unitTransform) : 
+            base(constructionData, unitTransform) {
         }
 
         public override void Enter() {
             base.Enter();
 
-            _stateMachine.ReusableData.MovementSpeedModifier = 0f;
-            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.StationaryForce;
+            _reusableData.MovementSpeedModifier = 0f;
+            _reusableData.CurrentJumpForce = _airborneData.JumpData.StationaryForce;
 
             ResetVelocity();
         }
@@ -19,7 +20,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Landing
         public override void Update() {
             base.Update();
 
-            if (_stateMachine.ReusableData.MovementInput == Vector2.zero)
+            if (_reusableData.MovementInput == Vector2.zero)
                 return;
 
             OnMove();

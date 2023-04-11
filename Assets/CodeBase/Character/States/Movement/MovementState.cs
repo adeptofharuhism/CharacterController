@@ -1,22 +1,39 @@
-﻿using Assets.CodeBase.Character.Data.States.Airborne;
+﻿using Assets.CodeBase.Character.Animation;
+using Assets.CodeBase.Character.Data.Colliders;
+using Assets.CodeBase.Character.Data.Layers;
+using Assets.CodeBase.Character.Data.States;
+using Assets.CodeBase.Character.Data.States.Airborne;
 using Assets.CodeBase.Character.Data.States.Grounded;
 using Assets.CodeBase.Infrastructure;
-using System;
+using Assets.CodeBase.Infrastructure.Services.Input;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement
 {
-    public class MovementState : IUnitState {
+    public class MovementState : IUnitState
+    {
         protected readonly MovementStateMachine _stateMachine;
+        protected readonly IInputService _inputService;
+        protected readonly UnitStateReusableData _reusableData;
+        protected readonly UnitGroundedData _groundedData;
+        protected readonly UnitAirborneData _airborneData;
+        protected readonly Rigidbody _rigidbody;
+        protected readonly UnitCapsuleColliderUtility _colliderUtility;
+        protected readonly UnitLayerData _layerData;
+        protected readonly Animator _animator;
+        protected readonly UnitAnimationData _animationData;
 
-        protected UnitGroundedData _groundedData;
-        protected UnitAirborneData _airborneData;
-
-        public MovementState(MovementStateMachine stateMachine) {
-            _stateMachine = stateMachine;
-
-            _groundedData = _stateMachine.Player.Data.GroundedData;
-            _airborneData = _stateMachine.Player.Data.AirborneData;
+        public MovementState(MovementStateConstructionData constructionData) {
+            _stateMachine = constructionData.StateMachine;
+            _inputService = constructionData.InputService;
+            _reusableData = constructionData.ReusableData;
+            _groundedData = constructionData.GroundedData;
+            _airborneData = constructionData.AirborneData;
+            _rigidbody = constructionData.Rigidbody;
+            _colliderUtility = constructionData.ColliderUtility;
+            _layerData = constructionData.LayerData;
+            _animator = constructionData.Animator;
+            _animationData = constructionData.AnimationData;
 
             InitializeData();
         }
@@ -45,12 +62,12 @@ namespace Assets.CodeBase.Character.States.Movement
         public virtual void OnAnimationTransitEvent() { }
 
         public virtual void OnTriggerEnter(Collider collider) {
-            if (_stateMachine.Player.LayerData.IsGroundLayer(collider.gameObject.layer))
+            if (_layerData.IsGroundLayer(collider.gameObject.layer))
                 OnContactWithGround(collider);
         }
 
         public virtual void OnTriggerExit(Collider collider) {
-            if (_stateMachine.Player.LayerData.IsGroundLayer(collider.gameObject.layer))
+            if (_layerData.IsGroundLayer(collider.gameObject.layer))
                 OnLostContactWithGround(collider);
         }
 
@@ -58,10 +75,10 @@ namespace Assets.CodeBase.Character.States.Movement
             SetBaseRotationData();
 
         private void ReadMovementInput() =>
-            _stateMachine.ReusableData.MovementInput = _stateMachine.Player.InputService.MoveInputValue;
+            _reusableData.MovementInput = _inputService.MoveInputValue;
 
         private void Move() {
-            if (_stateMachine.ReusableData.MovementInput == Vector2.zero || _stateMachine.ReusableData.MovementSpeedModifier == 0f)
+            if (_reusableData.MovementInput == Vector2.zero || _reusableData.MovementSpeedModifier == 0f)
                 return;
 
             Vector3 movementDirection = GetMovementDirection();
@@ -72,7 +89,7 @@ namespace Assets.CodeBase.Character.States.Movement
             float movementSpeed = GetMovementSpeed();
 
             Vector3 currentPlayerHorizontalVelocity = GetPlayerHorizontalVelocity();
-            _stateMachine.Player.Rigidbody.AddForce(
+            _rigidbody.AddForce(
                 targetRotationDirection * movementSpeed - currentPlayerHorizontalVelocity,
                 ForceMode.VelocityChange);
         }
@@ -86,8 +103,8 @@ namespace Assets.CodeBase.Character.States.Movement
         }
 
         private void UpdateTargetRotationData(float targetAngle) {
-            _stateMachine.ReusableData.CurrentTargetRotation.y = targetAngle;
-            _stateMachine.ReusableData.DampedTargetRotationPassedTime.y = 0f;
+            _reusableData.CurrentTargetRotation.y = targetAngle;
+            _reusableData.DampedTargetRotationPassedTime.y = 0f;
         }
 
         private static float GetDirectionAngle(Vector3 direction) {
@@ -99,14 +116,14 @@ namespace Assets.CodeBase.Character.States.Movement
         }
 
         protected void SetBaseRotationData() {
-            _stateMachine.ReusableData.RotationData = _groundedData.BaseRotationData;
-            _stateMachine.ReusableData.TimeToReachTargetRotation = _groundedData.BaseRotationData.TargetRotationReachTime;
+            _reusableData.RotationData = _groundedData.BaseRotationData;
+            _reusableData.TimeToReachTargetRotation = _groundedData.BaseRotationData.TargetRotationReachTime;
         }
 
         protected float UpdateTargetRotation(Vector3 direction) {
             float directionAngle = GetDirectionAngle(direction);
 
-            if (directionAngle != _stateMachine.ReusableData.CurrentTargetRotation.y)
+            if (directionAngle != _reusableData.CurrentTargetRotation.y)
                 UpdateTargetRotationData(directionAngle);
 
             return directionAngle;
@@ -116,26 +133,26 @@ namespace Assets.CodeBase.Character.States.Movement
             Quaternion.Euler(0f, targetYAngle, 0f) * Vector3.forward;
 
         protected void RotateTowardsTargetRotation() {
-            float currentYAngle = _stateMachine.Player.Rigidbody.rotation.eulerAngles.y;
+            float currentYAngle = _rigidbody.rotation.eulerAngles.y;
 
-            if (currentYAngle == _stateMachine.ReusableData.CurrentTargetRotation.y)
+            if (currentYAngle == _reusableData.CurrentTargetRotation.y)
                 return;
 
             float smoothedYAngle = Mathf.SmoothDampAngle(
                 currentYAngle,
-                _stateMachine.ReusableData.CurrentTargetRotation.y,
-                ref _stateMachine.ReusableData.DampedTargetRotationCurrentVelocity.y,
-                _stateMachine.ReusableData.TimeToReachTargetRotation.y - _stateMachine.ReusableData.DampedTargetRotationPassedTime.y);
+                _reusableData.CurrentTargetRotation.y,
+                ref _reusableData.DampedTargetRotationCurrentVelocity.y,
+                _reusableData.TimeToReachTargetRotation.y - _reusableData.DampedTargetRotationPassedTime.y);
 
-            _stateMachine.ReusableData.DampedTargetRotationPassedTime.y += Time.deltaTime;
+            _reusableData.DampedTargetRotationPassedTime.y += Time.deltaTime;
 
             Quaternion targetRotation = Quaternion.Euler(0f, smoothedYAngle, 0f);
 
-            _stateMachine.Player.Rigidbody.MoveRotation(targetRotation);
+            _rigidbody.MoveRotation(targetRotation);
         }
 
         protected Vector3 GetPlayerHorizontalVelocity() {
-            Vector3 playerHorizontalVelocity = _stateMachine.Player.Rigidbody.velocity;
+            Vector3 playerHorizontalVelocity = _rigidbody.velocity;
             playerHorizontalVelocity.y = 0;
 
             return playerHorizontalVelocity;
@@ -144,16 +161,16 @@ namespace Assets.CodeBase.Character.States.Movement
         protected void DecelerateHorizontally() {
             Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
 
-            _stateMachine.Player.Rigidbody.AddForce(
-                -playerHorizontalVelocity * _stateMachine.ReusableData.MovementDecelerationForce,
+            _rigidbody.AddForce(
+                -playerHorizontalVelocity * _reusableData.MovementDecelerationForce,
                 ForceMode.Acceleration);
         }
 
         protected void DecelerateVertically() {
             Vector3 playerVerticalVelocity = GetPlayerVerticalVelocity();
 
-            _stateMachine.Player.Rigidbody.AddForce(
-                -playerVerticalVelocity * _stateMachine.ReusableData.MovementDecelerationForce,
+            _rigidbody.AddForce(
+                -playerVerticalVelocity * _reusableData.MovementDecelerationForce,
                 ForceMode.Acceleration);
         }
 
@@ -171,39 +188,39 @@ namespace Assets.CodeBase.Character.States.Movement
             GetPlayerVerticalVelocity().y < minimalVelocity;
 
         protected Vector3 GetPlayerVerticalVelocity() =>
-            new Vector3(0f, _stateMachine.Player.Rigidbody.velocity.y, 0f);
+            new Vector3(0f, _rigidbody.velocity.y, 0f);
 
         protected float GetMovementSpeed(bool considerSlopes = true) =>
             considerSlopes
-            ? _groundedData.BaseSpeed * _stateMachine.ReusableData.MovementOnSlopesSpeedModifier * _stateMachine.ReusableData.MovementSpeedModifier
-            : _groundedData.BaseSpeed * _stateMachine.ReusableData.MovementSpeedModifier;
+            ? _groundedData.BaseSpeed * _reusableData.MovementOnSlopesSpeedModifier * _reusableData.MovementSpeedModifier
+            : _groundedData.BaseSpeed * _reusableData.MovementSpeedModifier;
 
         protected Vector3 GetMovementDirection() =>
-            new Vector3(_stateMachine.ReusableData.MovementInput.x, 0f, _stateMachine.ReusableData.MovementInput.y);
+            new Vector3(_reusableData.MovementInput.x, 0f, _reusableData.MovementInput.y);
 
         protected void ResetVelocity() =>
-            _stateMachine.Player.Rigidbody.velocity = Vector3.zero;
+            _rigidbody.velocity = Vector3.zero;
 
         protected void ResetVertivalVelocity() =>
-            _stateMachine.Player.Rigidbody.velocity = GetPlayerHorizontalVelocity();
+            _rigidbody.velocity = GetPlayerHorizontalVelocity();
 
         protected void StartAnimation(int animationHash) =>
-            _stateMachine.Player.Animator.SetBool(animationHash, true);
+            _animator.SetBool(animationHash, true);
 
         protected void StopAnimation(int animationHash) =>
-            _stateMachine.Player.Animator.SetBool(animationHash, false);
+            _animator.SetBool(animationHash, false);
 
         protected virtual void OnContactWithGround(Collider collider) { }
 
         protected virtual void OnLostContactWithGround(Collider collider) { }
 
         protected virtual void AddInputActionsCallbacks() =>
-            _stateMachine.Player.InputService.WalkToggleStarted += WalkToggle;
+            _inputService.WalkToggleStarted += WalkToggle;
 
         protected virtual void RemoveInputActionsCallbacks() =>
-            _stateMachine.Player.InputService.WalkToggleStarted -= WalkToggle;
+            _inputService.WalkToggleStarted -= WalkToggle;
 
         protected virtual void WalkToggle() =>
-            _stateMachine.ReusableData.IsWalking = !_stateMachine.ReusableData.IsWalking;
+            _reusableData.IsWalking = !_reusableData.IsWalking;
     }
 }

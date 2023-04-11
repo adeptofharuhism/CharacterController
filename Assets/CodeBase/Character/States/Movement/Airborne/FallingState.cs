@@ -1,28 +1,29 @@
 ﻿using Assets.CodeBase.Character.Data.States.Airborne;
 using Assets.CodeBase.Character.States.Movement.Grounded.Landing;
-using System;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Airborne
 {
     public class FallingState : AirborneState
     {
-        private UnitFallData _fallData;
+        private readonly Transform _unitTransform;
+        private readonly UnitFallData _fallData;
 
         private Vector3 _playerPositionOnEnter;
 
-        public FallingState(MovementStateMachine stateMachine) : base(stateMachine) {
+        public FallingState(MovementStateConstructionData constructionData, Transform unitTransform) : base(constructionData) {
+            _unitTransform = unitTransform;
             _fallData = _airborneData.FallData;
         }
 
         public override void Enter() {
             base.Enter();
 
-            StartAnimation(_stateMachine.Player.AnimationData.FallParameterHash);
+            StartAnimation(_animationData.FallParameterHash);
 
-            _playerPositionOnEnter = _stateMachine.Player.transform.position;
+            _playerPositionOnEnter = _unitTransform.position;
 
-            _stateMachine.ReusableData.MovementSpeedModifier = 0f;
+            _reusableData.MovementSpeedModifier = 0f;
 
             ResetVertivalVelocity();
         }
@@ -30,7 +31,7 @@ namespace Assets.CodeBase.Character.States.Movement.Airborne
         public override void Exit() {
             base.Exit();
 
-            StopAnimation(_stateMachine.Player.AnimationData.FallParameterHash);
+            StopAnimation(_animationData.FallParameterHash);
         }
 
         public override void PhysicsUpdate() {
@@ -40,7 +41,7 @@ namespace Assets.CodeBase.Character.States.Movement.Airborne
         }
 
         protected override void OnContactWithGround(Collider collider) {
-            float fallDistance = _playerPositionOnEnter.y - _stateMachine.Player.transform.position.y;
+            float fallDistance = _playerPositionOnEnter.y - _unitTransform.position.y;
 
             if (fallDistance < _fallData.MinimalDistanceAsHardFall) {
                 _stateMachine.Enter<LightLandingState>();
@@ -53,8 +54,8 @@ namespace Assets.CodeBase.Character.States.Movement.Airborne
         }
 
         private bool ShouldHardLand() => 
-            _stateMachine.ReusableData.IsWalking && !_stateMachine.ReusableData.IsSprinting 
-            || _stateMachine.ReusableData.MovementInput == Vector2.zero;
+            _reusableData.IsWalking && !_reusableData.IsSprinting 
+            || _reusableData.MovementInput == Vector2.zero;
 
         protected override void ResetSprintState() { }
 
@@ -67,7 +68,7 @@ namespace Assets.CodeBase.Character.States.Movement.Airborne
             Vector3 limitedVelocity =
                 new Vector3(0f, -_fallData.FallSpeedLimit - playerVerticalVelocity.y, 0f);
 
-            _stateMachine.Player.Rigidbody.AddForce(limitedVelocity, ForceMode.VelocityChange);
+            _rigidbody.AddForce(limitedVelocity, ForceMode.VelocityChange);
         }
     }
 }

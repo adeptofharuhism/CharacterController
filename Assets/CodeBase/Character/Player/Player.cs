@@ -4,16 +4,17 @@ using Assets.CodeBase.Character.Data.Layers;
 using Assets.CodeBase.Character.Data.ScriptableObjects;
 using Assets.CodeBase.Character.States.Movement;
 using Assets.CodeBase.Character.States.Movement.Grounded;
+using Assets.CodeBase.Infrastructure.Properties;
 using Assets.CodeBase.Infrastructure.Services;
 using Assets.CodeBase.Infrastructure.Services.Input;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.Player
 {
-    public class Player : MonoBehaviour
+    public class Player : MonoBehaviour, IAnimationEventUser
     {
         [Header("Movement Data")]
-        [SerializeField] private UnitScriptableObject _data;
+        [SerializeField] private UnitScriptableObject _movementData;
 
         [Header("Collisions")]
         [SerializeField] private Rigidbody _rigidbody;
@@ -24,26 +25,26 @@ namespace Assets.CodeBase.Character.Player
         [SerializeField] private Animator _animator;
         [SerializeField] private UnitAnimationData _animationData;
 
-        private IInputService _inputService;
         private MovementStateMachine _movementStateMachine;
 
-        public IInputService InputService => _inputService;
-        public Rigidbody Rigidbody => _rigidbody;
-        public UnitScriptableObject Data => _data;
-        public UnitCapsuleColliderUtility ColliderUtility => _colliderUtility;
-        public UnitLayerData LayerData => _layerData;
-        public UnitAnimationData AnimationData => _animationData;
         public Animator Animator => _animator;
 
         private void Awake() {
-            _inputService = AllServices.Container.Single<IInputService>();
-
             _colliderUtility.Initialize();
             _colliderUtility.CalculateCapsuleColliderDimensions();
 
             _animationData.Initialize();
 
-            _movementStateMachine = new MovementStateMachine(this);
+            _movementStateMachine = new MovementStateMachine(
+                transform,
+                AllServices.Container.Single<IInputService>(),
+                _movementData.GroundedData,
+                _movementData.AirborneData,
+                _rigidbody,
+                _colliderUtility,
+                _layerData,
+                _animator,
+                _animationData);
         }
 
         private void Start() {

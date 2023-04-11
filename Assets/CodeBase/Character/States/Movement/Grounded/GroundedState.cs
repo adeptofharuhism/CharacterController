@@ -7,16 +7,20 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
 {
     public class GroundedState : MovementState
     {
-        private SlopeData _slopeData;
+        protected readonly SlopeData _slopeData;
+        protected readonly Transform _unitTransform;
 
-        public GroundedState(MovementStateMachine stateMachine) : base(stateMachine) {
-            _slopeData = stateMachine.Player.ColliderUtility.SlopeData;
+        public GroundedState(MovementStateConstructionData constructionData, Transform unitTransform) :
+            base(constructionData) {
+
+            _slopeData = _colliderUtility.SlopeData;
+            _unitTransform = unitTransform;
         }
 
         public override void Enter() {
             base.Enter();
 
-            StartAnimation(_stateMachine.Player.AnimationData.GroundedParameterHash);
+            StartAnimation(_animationData.GroundedParameterHash);
 
             UpdateIsSprintingFlag();
         }
@@ -24,7 +28,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
         public override void Exit() {
             base.Exit();
 
-            StopAnimation(_stateMachine.Player.AnimationData.GroundedParameterHash);
+            StopAnimation(_animationData.GroundedParameterHash);
         }
 
         public override void PhysicsUpdate() {
@@ -36,44 +40,42 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
         protected override void AddInputActionsCallbacks() {
             base.AddInputActionsCallbacks();
 
-            _stateMachine.Player.InputService.MovementCancelled += OnMovementCancelled;
-            _stateMachine.Player.InputService.DashStarted += OnDashStarted;
-            _stateMachine.Player.InputService.JumpStarted += OnJumpStarted;
+            _inputService.MovementCancelled += OnMovementCancelled;
+            _inputService.DashStarted += OnDashStarted;
+            _inputService.JumpStarted += OnJumpStarted;
         }
 
         protected override void RemoveInputActionsCallbacks() {
             base.RemoveInputActionsCallbacks();
 
-            _stateMachine.Player.InputService.MovementCancelled -= OnMovementCancelled;
-            _stateMachine.Player.InputService.DashStarted -= OnDashStarted;
-            _stateMachine.Player.InputService.JumpStarted -= OnJumpStarted;
+            _inputService.MovementCancelled -= OnMovementCancelled;
+            _inputService.DashStarted -= OnDashStarted;
+            _inputService.JumpStarted -= OnJumpStarted;
         }
 
         protected override void OnLostContactWithGround(Collider collider) {
             Vector3 capsuleColliderCenterInWorldSpace =
-                _stateMachine.Player.ColliderUtility.CapsuleColliderData.Collider.bounds.center;
+                _colliderUtility.CapsuleColliderData.Collider.bounds.center;
 
             if (IsThereGroundUnderneath())
                 return;
 
             Ray downwardsRayFromCapsuleBottom =
                 new Ray(
-                    capsuleColliderCenterInWorldSpace -
-                    _stateMachine.
-                        Player.ColliderUtility.CapsuleColliderData.ColliderVerticalExtents,
+                    capsuleColliderCenterInWorldSpace - _colliderUtility.CapsuleColliderData.ColliderVerticalExtents,
                     Vector3.down);
 
             if (!Physics.Raycast(
                 downwardsRayFromCapsuleBottom,
                 out _,
                 _groundedData.GroundToFallRayDistance,
-                _stateMachine.Player.LayerData.GroundLayer,
+                _layerData.GroundLayer,
                 QueryTriggerInteraction.Ignore))
                 OnFall();
         }
 
         private bool IsThereGroundUnderneath() {
-            BoxCollider groundCheckCollider = _stateMachine.Player.ColliderUtility.TriggerColliderData.GroundCheckCollider;
+            BoxCollider groundCheckCollider = _colliderUtility.TriggerColliderData.GroundCheckCollider;
 
             Vector3 groundColliderCenterInWorldspace =
                 groundCheckCollider.bounds.center;
@@ -81,9 +83,9 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
             Collider[] overlappedGroundCollider =
                 Physics.OverlapBox(
                     groundColliderCenterInWorldspace,
-                    _stateMachine.Player.ColliderUtility.TriggerColliderData.GroundCheckColliderExtents,
+                    _colliderUtility.TriggerColliderData.GroundCheckColliderExtents,
                     groundCheckCollider.transform.rotation,
-                    _stateMachine.Player.LayerData.GroundLayer,
+                    _layerData.GroundLayer,
                     QueryTriggerInteraction.Ignore);
 
             return overlappedGroundCollider.Length > 0;
@@ -102,9 +104,9 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
             _stateMachine.Enter<DashingState>();
 
         protected virtual void OnMove() {
-            if (_stateMachine.ReusableData.IsSprinting) {
+            if (_reusableData.IsSprinting) {
                 _stateMachine.Enter<SprintingState>();
-            } else if (_stateMachine.ReusableData.IsWalking) {
+            } else if (_reusableData.IsWalking) {
                 _stateMachine.Enter<WalkingState>();
             } else {
                 _stateMachine.Enter<RunningState>();
@@ -112,17 +114,17 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
         }
 
         private void UpdateIsSprintingFlag() {
-            if (!_stateMachine.ReusableData.IsSprinting)
+            if (!_reusableData.IsSprinting)
                 return;
 
-            if (_stateMachine.ReusableData.MovementInput != Vector2.zero)
+            if (_reusableData.MovementInput != Vector2.zero)
                 return;
 
-            _stateMachine.ReusableData.IsSprinting = false;
+            _reusableData.IsSprinting = false;
         }
 
         private void FloatCapsule() {
-            Vector3 capsuleColliderCenter = _stateMachine.Player.ColliderUtility.CapsuleColliderData.Collider.bounds.center;
+            Vector3 capsuleColliderCenter = _colliderUtility.CapsuleColliderData.Collider.bounds.center;
 
             Ray downwardsFromCapsuleCenter = new(capsuleColliderCenter, Vector3.down);
 
@@ -130,7 +132,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
                 downwardsFromCapsuleCenter,
                 out RaycastHit hit,
                 _slopeData.FloatRayDistance,
-                _stateMachine.Player.LayerData.GroundLayer,
+                _layerData.GroundLayer,
                 QueryTriggerInteraction.Ignore)) {
 
                 float groundAngle = Vector3.Angle(hit.normal, -downwardsFromCapsuleCenter.direction);
@@ -140,8 +142,8 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
                     return;
 
                 float distanceToFloatingPoint =
-                    _stateMachine.Player.ColliderUtility.CapsuleColliderData.ColliderCenterInLocalSpace.y *
-                    _stateMachine.Player.transform.localScale.y - hit.distance;
+                    _colliderUtility.CapsuleColliderData.ColliderCenterInLocalSpace.y *
+                    _unitTransform.localScale.y - hit.distance;
 
                 if (distanceToFloatingPoint == 0f)
                     return;
@@ -150,14 +152,14 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
 
                 Vector3 liftForce = new(0f, amountToLift, 0f);
 
-                _stateMachine.Player.Rigidbody.AddForce(liftForce, ForceMode.VelocityChange);
+                _rigidbody.AddForce(liftForce, ForceMode.VelocityChange);
             }
         }
 
         private float SetSlopeModifierOnAngle(float groundAngle) {
-            float slopeSpeedModifier = _stateMachine.Player.Data.GroundedData.SlopeSpeedAngles.Evaluate(groundAngle);
+            float slopeSpeedModifier = _groundedData.SlopeSpeedAngles.Evaluate(groundAngle);
 
-            _stateMachine.ReusableData.MovementOnSlopesSpeedModifier = slopeSpeedModifier;
+            _reusableData.MovementOnSlopesSpeedModifier = slopeSpeedModifier;
 
             return slopeSpeedModifier;
         }

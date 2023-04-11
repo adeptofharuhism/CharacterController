@@ -1,7 +1,6 @@
 ﻿using Assets.CodeBase.Character.Data.States.Grounded;
 using Assets.CodeBase.Character.States.Movement.Grounded.Moving;
 using Assets.CodeBase.Character.States.Movement.Grounded.Stopping;
-using System;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded
@@ -15,23 +14,25 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
 
         private bool _shouldKeepRotating;
 
-        public DashingState(MovementStateMachine stateMachine) : base(stateMachine) {
-            _dashData = _stateMachine.Player.Data.GroundedData.DashData;
+        public DashingState(MovementStateConstructionData constructionData, Transform unitTransform) : 
+            base(constructionData, unitTransform) {
+
+            _dashData = _groundedData.DashData;
         }
 
         public override void Enter() {
             base.Enter();
 
-            StartAnimation(_stateMachine.Player.AnimationData.DashParameterHash);
+            StartAnimation(_animationData.DashParameterHash);
 
-            _stateMachine.ReusableData.MovementSpeedModifier = _dashData.SpeedModifier;
-            _stateMachine.ReusableData.RotationData = _dashData.RotationData;
-            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.StrongForce;
+            _reusableData.MovementSpeedModifier = _dashData.SpeedModifier;
+            _reusableData.RotationData = _dashData.RotationData;
+            _reusableData.CurrentJumpForce = _airborneData.JumpData.StrongForce;
 
             Dash();
             UpdateConsecutiveDashes();
 
-            _shouldKeepRotating = _stateMachine.ReusableData.MovementInput != Vector2.zero;
+            _shouldKeepRotating = _reusableData.MovementInput != Vector2.zero;
 
             _startTime = Time.time;
         }
@@ -39,7 +40,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
         public override void Exit() {
             base.Exit();
 
-            StopAnimation(_stateMachine.Player.AnimationData.DashParameterHash);
+            StopAnimation(_animationData.DashParameterHash);
 
             SetBaseRotationData();
         }
@@ -56,13 +57,13 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
         protected override void AddInputActionsCallbacks() {
             base.AddInputActionsCallbacks();
 
-            _stateMachine.Player.InputService.MovementPerformed += OnMovementStarted;
+            _inputService.MovementPerformed += OnMovementStarted;
         }
 
         protected override void RemoveInputActionsCallbacks() {
             base.RemoveInputActionsCallbacks();
 
-            _stateMachine.Player.InputService.MovementPerformed -= OnMovementStarted;
+            _inputService.MovementPerformed -= OnMovementStarted;
         }
 
         private void OnMovementStarted() {
@@ -70,7 +71,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
         }
 
         public override void OnAnimationTransitEvent() {
-            if (_stateMachine.ReusableData.MovementInput == Vector2.zero)
+            if (_reusableData.MovementInput == Vector2.zero)
                 _stateMachine.Enter<HardStoppingState>();
             else _stateMachine.Enter<SprintingState>();
         }
@@ -79,18 +80,18 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
         protected override void OnDashStarted() { }
 
         private void Dash() {
-            Vector3 dashDirection = _stateMachine.Player.transform.forward;
+            Vector3 dashDirection = _unitTransform.forward;
 
             dashDirection.y = 0f;
 
             UpdateTargetRotation(dashDirection);
 
-            if (_stateMachine.ReusableData.MovementInput != Vector2.zero) {
+            if (_reusableData.MovementInput != Vector2.zero) {
                 UpdateTargetRotation(GetMovementDirection());
-                dashDirection = GetTargetRotationDirection(_stateMachine.ReusableData.CurrentTargetRotation.y);
+                dashDirection = GetTargetRotationDirection(_reusableData.CurrentTargetRotation.y);
             }
 
-            _stateMachine.Player.Rigidbody.velocity = dashDirection * GetMovementSpeed(false);
+            _rigidbody.velocity = dashDirection * GetMovementSpeed(false);
         }
 
         private void UpdateConsecutiveDashes() {
@@ -101,7 +102,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
             if (_consecutiveDashesUsed == _dashData.ConsecutiveDashesLimitAmount) {
                 _consecutiveDashesUsed = 0;
 
-                _stateMachine.Player.InputService.DisableDashFor(_dashData.DashLimitReachedCooldown);
+                _inputService.DisableDashFor(_dashData.DashLimitReachedCooldown);
             }
         }
 

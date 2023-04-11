@@ -1,24 +1,28 @@
-﻿namespace Assets.CodeBase.Character.States.Movement.Grounded.Stopping
+﻿using Assets.CodeBase.Utility.Colliders;
+using UnityEngine;
+
+namespace Assets.CodeBase.Character.States.Movement.Grounded.Stopping
 {
     public class MediumStoppingState : StoppingState
     {
-        public MediumStoppingState(MovementStateMachine stateMachine) : base(stateMachine) {
+        public MediumStoppingState(MovementStateConstructionData constructionData, Transform unitTransform) : 
+            base(constructionData, unitTransform) {
         }
 
         public override void Enter() {
             base.Enter();
 
-            StartAnimation(_stateMachine.Player.AnimationData.MediumStopParameterHash);
+            StartAnimation(_animationData.MediumStopParameterHash);
 
-            _stateMachine.ReusableData.MovementDecelerationForce =
-                _stateMachine.Player.Data.GroundedData.StopData.MediumDecelerationForce;
-            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.MediumForce;
+            _reusableData.MovementDecelerationForce =
+                _groundedData.StopData.MediumDecelerationForce;
+            _reusableData.CurrentJumpForce = _airborneData.JumpData.MediumForce;
         }
 
         public override void Exit() {
             base.Exit();
 
-            StopAnimation(_stateMachine.Player.AnimationData.MediumStopParameterHash);
+            StopAnimation(_animationData.MediumStopParameterHash);
         }
     }
 }

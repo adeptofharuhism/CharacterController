@@ -1,19 +1,22 @@
 ﻿using Assets.CodeBase.Character.States.Movement.Grounded.Moving;
+using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded.Landing
 {
     public class HardLandingState : LandingState
     {
-        public HardLandingState(MovementStateMachine stateMachine) : base(stateMachine) {
+        public HardLandingState(MovementStateConstructionData constructionData, Transform unitTransform) : 
+            base(constructionData, unitTransform) {
         }
 
         public override void Enter() {
             base.Enter();
 
-            StartAnimation(_stateMachine.Player.AnimationData.HardLandParameterHash);
+            StartAnimation(_animationData.HardLandParameterHash);
 
-            _stateMachine.Player.InputService.DisableMove();
-            _stateMachine.ReusableData.MovementSpeedModifier = 0f;
+            _reusableData.MovementSpeedModifier = 0f;
+
+            _inputService.DisableMove();
 
             ResetVelocity();
         }
@@ -21,9 +24,9 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Landing
         public override void Exit() {
             base.Exit();
 
-            StopAnimation(_stateMachine.Player.AnimationData.HardLandParameterHash);
+            StopAnimation(_animationData.HardLandParameterHash);
 
-            _stateMachine.Player.InputService.Enable();
+            _inputService.Enable();
         }
 
         public override void PhysicsUpdate() {
@@ -36,7 +39,7 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Landing
         }
 
         public override void OnAnimationExitEvent() => 
-            _stateMachine.Player.InputService.Enable();
+            _inputService.Enable();
 
         public override void OnAnimationTransitEvent() =>
             _stateMachine.Enter<IdlingState>();
@@ -44,17 +47,17 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded.Landing
         protected override void AddInputActionsCallbacks() {
             base.AddInputActionsCallbacks();
 
-            _stateMachine.Player.InputService.MovementStarted += OnMovementStarted;
+            _inputService.MovementStarted += OnMovementStarted;
         }
 
         protected override void RemoveInputActionsCallbacks() {
             base.RemoveInputActionsCallbacks();
 
-            _stateMachine.Player.InputService.MovementStarted -= OnMovementStarted;
+            _inputService.MovementStarted -= OnMovementStarted;
         }
 
         protected override void OnMove() {
-            if (_stateMachine.ReusableData.IsWalking)
+            if (_reusableData.IsWalking)
                 return;
 
             _stateMachine.Enter<RunningState>();

@@ -1,25 +1,26 @@
 ﻿using Assets.CodeBase.Character.States.Movement.Grounded.Stopping;
+using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded.Moving
 {
     public class WalkingState : MovingState
     {
-        public WalkingState(MovementStateMachine stateMachine) : base(stateMachine) {
+        public WalkingState(MovementStateConstructionData constructionData, Transform unitTransform) : base(constructionData, unitTransform) {
         }
 
         public override void Enter() {
             base.Enter();
 
-            StartAnimation(_stateMachine.Player.AnimationData.WalkParameterHash);
+            StartAnimation(_animationData.WalkParameterHash);
 
-            _stateMachine.ReusableData.MovementSpeedModifier = _groundedData.WalkData.SpeedModifier;
-            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.WeakForce;
+            _reusableData.MovementSpeedModifier = _groundedData.WalkData.SpeedModifier;
+            _reusableData.CurrentJumpForce = _airborneData.JumpData.WeakForce;
         }
 
         public override void Exit() {
             base.Exit();
 
-            StopAnimation(_stateMachine.Player.AnimationData.WalkParameterHash);
+            StopAnimation(_animationData.WalkParameterHash);
         }
 
         protected override void OnMovementCancelled() {

@@ -1,20 +1,20 @@
-﻿using Assets.CodeBase.Character.States.Movement.Grounded.Moving;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.CodeBase.Character.States.Movement.Grounded
 {
     public class IdlingState : GroundedState
     {
-        public IdlingState(MovementStateMachine stateMachine) : base(stateMachine) {
+        public IdlingState(MovementStateConstructionData constructionData, Transform unitTransform) : 
+            base(constructionData, unitTransform) {
         }
 
         public override void Enter() {
             base.Enter();
 
-            StartAnimation(_stateMachine.Player.AnimationData.IdleParameterHash);
+            StartAnimation(_animationData.IdleParameterHash);
 
-            _stateMachine.ReusableData.MovementSpeedModifier = 0f;
-            _stateMachine.ReusableData.CurrentJumpForce = _airborneData.JumpData.StationaryForce;
+            _reusableData.MovementSpeedModifier = 0f;
+            _reusableData.CurrentJumpForce = _airborneData.JumpData.StationaryForce;
 
             ResetVelocity();
         }
@@ -22,13 +22,13 @@ namespace Assets.CodeBase.Character.States.Movement.Grounded
         public override void Exit() {
             base.Exit();
 
-            StopAnimation(_stateMachine.Player.AnimationData.IdleParameterHash);
+            StopAnimation(_animationData.IdleParameterHash);
         }
 
         public override void Update() {
             base.Update();
 
-            if (_stateMachine.ReusableData.MovementInput == Vector2.zero)
+            if (_reusableData.MovementInput == Vector2.zero)
                 return;
 
             OnMove();

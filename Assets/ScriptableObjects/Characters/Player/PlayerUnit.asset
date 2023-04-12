@@ -18,7 +18,7 @@ MonoBehaviour:
     _baseRotationData:
       _targetRotationReachTime: {x: 0, y: 0.14, z: 0}
     _walkData:
-      _speedModifier: 0.225
+      _speedModifier: 0.4
     _runData:
       _speedModifier: 1
       _runToWalkTime: 1
@@ -87,6 +87,7 @@ MonoBehaviour:
       _lightDecelerationForce: 5
       _mediumDecelerationForce: 6.5
       _hardDecelerationForce: 5
+      _forceStopStateExitTime: 0.14
     _rollData:
       _speedModifier: 1
   _airborneData:
